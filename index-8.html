@@ -1,0 +1,1496 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
+<title>TeamChat</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><defs><linearGradient id='bg' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%230f1219'/><stop offset='100%25' stop-color='%231a2035'/></linearGradient><linearGradient id='sg' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%2300d68f'/><stop offset='100%25' stop-color='%2300a86b'/></linearGradient><filter id='gl'><feGaussianBlur stdDeviation='10' result='b'/><feMerge><feMergeNode in='b'/><feMergeNode in='SourceGraphic'/></feMerge></filter></defs><rect width='512' height='512' rx='110' fill='url(%23bg)'/><rect width='512' height='512' rx='110' fill='none' stroke='%2300d68f' stroke-width='10' opacity='0.25'/><circle cx='256' cy='240' r='170' fill='%2300d68f' opacity='0.06'/><text x='256' y='256' font-size='330' font-family='Georgia,serif' font-weight='900' fill='url(%23sg)' text-anchor='middle' dominant-baseline='middle' filter='url(%23gl)'>S</text><rect x='338' y='358' width='116' height='48' rx='12' fill='%2300d68f'/><text x='396' y='382' font-size='22' font-family='monospace' font-weight='900' fill='%230b0d14' text-anchor='middle' dominant-baseline='middle' dy='2'>TC</text></svg>"/>
+<meta name="theme-color" content="#00d68f"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="TeamChat"/>
+<link rel="manifest" href="data:application/json,{
+  %22name%22:%22TeamChat%22,
+  %22short_name%22:%22TeamChat%22,
+  %22description%22:%22Platform komunikasi tim Anda%22,
+  %22start_url%22:%22.%22,
+  %22display%22:%22standalone%22,
+  %22orientation%22:%22portrait%22,
+  %22theme_color%22:%22%2300d68f%22,
+  %22background_color%22:%22%230b0d14%22,
+  %22lang%22:%22id%22,
+  %22icons%22:[{%22src%22:%22data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='112' fill='%2300d68f'/%3E%3Ctext y='50%25' x='50%25' font-size='280' font-family='monospace' font-weight='900' fill='%230b0d14' text-anchor='middle' dominant-baseline='middle'%3ETC%3C/text%3E%3C/svg%3E%22,%22sizes%22:%22512x512%22,%22type%22:%22image/svg+xml%22,%22purpose%22:%22any maskable%22}]
+}"/>
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20512%20512%22%3E%0A%20%20%3Cdefs%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22bg%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230f1219%22/%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%231a2035%22/%3E%0A%20%20%20%20%3C/linearGradient%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22sg%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%2300d68f%22/%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%2300a86b%22/%3E%0A%20%20%20%20%3C/linearGradient%3E%0A%20%20%20%20%3Cfilter%20id%3D%22glow%22%20x%3D%22-20%25%22%20y%3D%22-20%25%22%20width%3D%22140%25%22%20height%3D%22140%25%22%3E%0A%20%20%20%20%20%20%3CfeGaussianBlur%20stdDeviation%3D%2212%22%20result%3D%22blur%22/%3E%0A%20%20%20%20%20%20%3CfeMerge%3E%0A%20%20%20%20%20%20%20%20%3CfeMergeNode%20in%3D%22blur%22/%3E%0A%20%20%20%20%20%20%20%20%3CfeMergeNode%20in%3D%22SourceGraphic%22/%3E%0A%20%20%20%20%20%20%3C/feMerge%3E%0A%20%20%20%20%3C/filter%3E%0A%20%20%3C/defs%3E%0A%20%20%0A%20%20%3C%21--%20Background%20dark%20rounded%20square%20--%3E%0A%20%20%3Crect%20width%3D%22512%22%20height%3D%22512%22%20rx%3D%22110%22%20fill%3D%22url%28%23bg%29%22/%3E%0A%20%20%0A%20%20%3C%21--%20Subtle%20green%20border%20--%3E%0A%20%20%3Crect%20width%3D%22512%22%20height%3D%22512%22%20rx%3D%22110%22%20fill%3D%22none%22%20%0A%20%20%20%20%20%20%20%20stroke%3D%22%2300d68f%22%20stroke-width%3D%2210%22%20opacity%3D%220.2%22/%3E%0A%20%20%0A%20%20%3C%21--%20Glow%20circle%20--%3E%0A%20%20%3Ccircle%20cx%3D%22256%22%20cy%3D%22240%22%20r%3D%22180%22%20fill%3D%22%2300d68f%22%20opacity%3D%220.05%22/%3E%0A%20%20%0A%20%20%3C%21--%20Main%20S%20letter%20--%3E%0A%20%20%3Ctext%20x%3D%22256%22%20y%3D%22270%22%20%0A%20%20%20%20%20%20%20%20font-size%3D%22340%22%20%0A%20%20%20%20%20%20%20%20font-family%3D%22Georgia%2C%20%27Times%20New%20Roman%27%2C%20serif%22%20%0A%20%20%20%20%20%20%20%20font-weight%3D%22900%22%20%0A%20%20%20%20%20%20%20%20fill%3D%22url%28%23sg%29%22%20%0A%20%20%20%20%20%20%20%20text-anchor%3D%22middle%22%20%0A%20%20%20%20%20%20%20%20dominant-baseline%3D%22middle%22%0A%20%20%20%20%20%20%20%20filter%3D%22url%28%23glow%29%22%3ES%3C/text%3E%0A%20%20%0A%20%20%3C%21--%20TC%20badge%20bottom%20right%20--%3E%0A%20%20%3Crect%20x%3D%22335%22%20y%3D%22355%22%20width%3D%22122%22%20height%3D%2250%22%20rx%3D%2214%22%20fill%3D%22%2300d68f%22/%3E%0A%20%20%3Ctext%20x%3D%22396%22%20y%3D%22380%22%20%0A%20%20%20%20%20%20%20%20font-size%3D%2224%22%20%0A%20%20%20%20%20%20%20%20font-family%3D%22%27Courier%20New%27%2C%20monospace%22%20%0A%20%20%20%20%20%20%20%20font-weight%3D%22900%22%20%0A%20%20%20%20%20%20%20%20fill%3D%22%230b0d14%22%20%0A%20%20%20%20%20%20%20%20text-anchor%3D%22middle%22%20%0A%20%20%20%20%20%20%20%20dominant-baseline%3D%22middle%22%20%0A%20%20%20%20%20%20%20%20dy%3D%221%22%3ETC%3C/text%3E%0A%3C/svg%3E"/>
+<link rel="apple-touch-icon-old" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><defs><linearGradient id='bg' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%230f1219'/><stop offset='100%25' stop-color='%231a2035'/></linearGradient><linearGradient id='sg' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%2300d68f'/><stop offset='100%25' stop-color='%2300a86b'/></linearGradient><filter id='gl'><feGaussianBlur stdDeviation='10' result='b'/><feMerge><feMergeNode in='b'/><feMergeNode in='SourceGraphic'/></feMerge></filter></defs><rect width='512' height='512' rx='110' fill='url(%23bg)'/><rect width='512' height='512' rx='110' fill='none' stroke='%2300d68f' stroke-width='10' opacity='0.25'/><circle cx='256' cy='240' r='170' fill='%2300d68f' opacity='0.06'/><text x='256' y='256' font-size='330' font-family='Georgia,serif' font-weight='900' fill='url(%23sg)' text-anchor='middle' dominant-baseline='middle' filter='url(%23gl)'>S</text><rect x='338' y='358' width='116' height='48' rx='12' fill='%2300d68f'/><text x='396' y='382' font-size='22' font-family='monospace' font-weight='900' fill='%230b0d14' text-anchor='middle' dominant-baseline='middle' dy='2'>TC</text></svg>"/>
+
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700;800;900&family=DM+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+<script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden;font-family:"DM Sans",sans-serif}
+button{cursor:pointer;font-family:"DM Sans",sans-serif}
+input,select,textarea{font-family:"DM Sans",sans-serif}
+::-webkit-scrollbar{width:3px;height:3px}
+::-webkit-scrollbar-thumb{background:#252a40;border-radius:4px}
+select option{background:#181c28}
+:root{
+  --bg:#0b0d14;--surf:#111420;--card:#181c28;--bdr:#252a40;
+  --acc:#00d68f;--acc-lo:#00d68f15;--acc-md:#00d68f50;
+  --blue:#4a8eff;--blue-lo:#4a8eff15;
+  --red:#ff4d4d;--red-lo:#ff4d4d15;
+  --org:#ff9f43;--txt:#e2e6f3;--sub:#7a84a0;--dim:#383e5a;
+}
+#app{height:100vh;flex-direction:column;background:var(--bg);color:var(--txt);display:none}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes toastIn{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+.auth-page{display:none;align-items:center;justify-content:center;min-height:100vh;padding:20px;background:var(--bg);position:relative;overflow:hidden}
+.abg{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 80% 60% at 20% 10%,#00d68f08,transparent 60%),radial-gradient(ellipse 60% 80% at 80% 90%,#4a8eff08,transparent 60%)}
+.agr{position:absolute;inset:0;pointer-events:none;opacity:.2;background-image:linear-gradient(var(--bdr) 1px,transparent 1px),linear-gradient(90deg,var(--bdr) 1px,transparent 1px);background-size:40px 40px}
+.abox{position:relative;z-index:1;width:100%;max-width:420px;background:var(--surf);border:1px solid var(--bdr);border-radius:20px;padding:30px 26px;box-shadow:0 32px 80px #000a;animation:fadeUp .4s ease}
+.alogo{display:flex;align-items:center;gap:10px;justify-content:center;margin-bottom:20px}
+.alogo-ic{width:40px;height:40px;border-radius:10px;background:var(--acc);color:var(--bg);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;font-family:"DM Mono",monospace}
+.alogo-tx{font-size:20px;font-weight:900;color:var(--txt)}
+.atitle{text-align:center;font-size:16px;font-weight:800;color:var(--txt);margin-bottom:4px}
+.asub{text-align:center;font-size:12px;color:var(--sub);margin-bottom:20px}
+.fl{display:block;font-size:10px;font-weight:700;color:var(--dim);letter-spacing:1.3px;font-family:"DM Mono",monospace;margin-bottom:4px}
+.fi{width:100%;background:var(--card);border:1px solid var(--bdr);border-radius:10px;padding:10px 12px;color:var(--txt);font-size:13px;outline:none;margin-bottom:11px;transition:border-color .2s}
+.fi:focus{border-color:var(--acc-md)} .fi::placeholder{color:var(--dim)}
+.fs{width:100%;background:var(--card);border:1px solid var(--bdr);border-radius:10px;padding:10px 12px;color:var(--txt);font-size:13px;outline:none;margin-bottom:11px;appearance:none}
+.btnp{width:100%;background:var(--acc);border:none;border-radius:10px;padding:11px;color:var(--bg);font-size:13px;font-weight:900;font-family:"DM Mono",monospace}
+.adiv{display:flex;align-items:center;gap:10px;margin:12px 0;color:var(--dim);font-size:11px}
+.adiv::before,.adiv::after{content:"";flex:1;height:1px;background:var(--bdr)}
+.asw{text-align:center;font-size:12px;color:var(--sub);margin-top:10px}
+.asw a{color:var(--acc);font-weight:700;cursor:pointer}
+.aerr{background:var(--red-lo);border:1px solid #ff4d4d30;border-radius:8px;padding:8px 12px;font-size:12px;color:var(--red);margin-bottom:10px;display:none}
+#topbar{height:50px;flex-shrink:0;padding:0 12px;display:flex;align-items:center;gap:8px;background:var(--surf);border-bottom:1px solid var(--bdr)}
+.brand{background:var(--acc);color:var(--bg);font-weight:900;font-size:12px;padding:4px 8px;border-radius:7px;font-family:"DM Mono",monospace;flex-shrink:0}
+.navbtn{background:transparent;border:1px solid transparent;border-radius:8px;padding:5px 10px;font-size:12px;font-weight:700;color:var(--sub);display:flex;align-items:center;gap:4px;transition:all .15s;flex-shrink:0}
+.navbtn.active{background:var(--acc-lo);border-color:var(--acc-md);color:var(--acc)}
+.chip{margin-left:auto;display:flex;align-items:center;gap:7px;cursor:pointer}
+.cnm{font-size:11px;font-weight:700;color:var(--txt)} .crl{font-size:9px;color:var(--acc);font-family:"DM Mono",monospace}
+.btnout{background:var(--red-lo);border:1px solid #ff4d4d30;border-radius:7px;padding:5px 8px;color:var(--red);font-size:11px;font-weight:700;font-family:"DM Mono",monospace;margin-left:4px;flex-shrink:0}
+#srings{display:flex;gap:10px;padding:10px 12px;overflow-x:auto;border-bottom:1px solid var(--bdr);flex-shrink:0;min-height:76px;align-items:center}
+.sring{background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:3px;flex-shrink:0}
+.srav{border:2.5px solid var(--dim);border-radius:50%;padding:2px} .sring.has .srav{border-color:var(--acc)}
+.srlb{font-size:10px;color:var(--sub);max-width:48px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:center}
+.sovl{position:absolute;inset:0;z-index:30;display:flex;pointer-events:none;opacity:0;transition:opacity .2s}
+.sovl.open{pointer-events:auto;opacity:1}
+.ovbg{flex:1;background:#0009;cursor:pointer}
+.sidebar{width:225px;height:100%;flex-shrink:0;background:var(--surf);border-right:1px solid var(--bdr);display:flex;flex-direction:column;transition:transform .25s}
+.sovl .sidebar{position:absolute;left:0;top:0;bottom:0;z-index:31}
+.sovl:not(.open) .sidebar{transform:translateX(-100%)} .sovl.open .sidebar{transform:translateX(0)}
+.stabs{display:flex;border-bottom:1px solid var(--bdr);flex-shrink:0}
+.stab{flex:1;background:none;border:none;padding:9px 4px;font-size:11px;font-weight:600;color:var(--sub);border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s}
+.stab.active{color:var(--acc);border-bottom-color:var(--acc);font-weight:800}
+.sbody{flex:1;overflow-y:auto;padding:4px 8px 12px}
+.slbl{font-size:10px;font-weight:700;color:var(--dim);letter-spacing:1.4px;padding:8px 10px 5px;font-family:"DM Mono",monospace}
+.sitm{width:100%;display:flex;align-items:center;justify-content:space-between;gap:6px;padding:7px 10px;border-radius:8px;border:none;font-size:13px;background:transparent;color:var(--sub);font-weight:500;margin-bottom:2px;transition:all .12s;text-align:left}
+.sitm:hover{background:var(--card);color:var(--txt)} .sitm.active{background:var(--acc-lo);color:var(--acc);font-weight:700}
+.sil{display:flex;align-items:center;gap:7px;min-width:0;overflow:hidden}
+.sin{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#chatview{flex:1;display:flex;overflow:hidden;min-height:0}
+.cwrap{display:flex;height:100%;position:relative;overflow:hidden;width:100%;min-height:0}
+.cmain{flex:1;display:flex;flex-direction:column;min-width:0;overflow:hidden;min-height:0}
+.chdr{height:50px;flex-shrink:0;padding:0 12px;display:flex;align-items:center;gap:9px;background:var(--surf);border-bottom:1px solid var(--bdr)}
+.mbtn{background:var(--card);border:1px solid var(--bdr);border-radius:8px;padding:5px 9px;font-size:14px;color:var(--sub);flex-shrink:0}
+.msgs{flex:1;overflow-y:auto;padding:10px 12px 80px;display:flex;flex-direction:column;gap:2px}
+.mrow{display:flex;gap:8px;align-items:flex-end} .mrow.own{flex-direction:row-reverse} .msp{margin-top:10px}
+.mavc{width:30px;flex-shrink:0;display:flex;align-items:flex-end}
+.mbody{max-width:75%;display:flex;flex-direction:column;align-items:flex-start}
+.mrow.own .mbody{align-items:flex-end}
+.mmeta{display:flex;align-items:baseline;gap:6px;margin-bottom:3px}
+.mrow.own .mmeta{flex-direction:row-reverse}
+.msndr{font-size:11px;font-weight:700;color:var(--blue)} .mrow.own .msndr{color:var(--acc)}
+.mtime{font-size:10px;color:var(--dim)}
+.mbbl{padding:8px 12px;font-size:13px;line-height:1.55;border:1px solid var(--bdr);word-break:break-word;background:var(--card);color:var(--txt);border-radius:4px 14px 14px 14px;cursor:pointer}
+.mrow.own .mbbl{background:var(--acc);color:var(--bg);border-color:transparent;border-radius:14px 4px 14px 14px;font-weight:600}
+.rprev{background:var(--bg);border-left:3px solid var(--acc);border-radius:4px 8px 8px 4px;padding:5px 10px;margin-bottom:4px;max-width:100%}
+.rprev.own{border-left-color:#ffffff50;background:#00000025}
+.rpnm{font-size:10px;font-weight:700;color:var(--acc);display:block} .rprev.own .rpnm{color:#ffffffaa}
+.rptx{font-size:11px;color:var(--sub);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block;max-width:180px}
+.sysmsg{text-align:center;padding:5px 12px;font-size:11px;color:var(--sub);background:var(--card);border:1px solid var(--bdr);border-radius:20px;margin:6px auto;max-width:260px;font-family:"DM Mono",monospace}
+#rbar{display:none;align-items:center;gap:8px;padding:6px 12px;background:var(--card);border-top:1px solid var(--bdr);flex-shrink:0}
+.rbi{flex:1;min-width:0}
+.rbn{font-size:11px;font-weight:700;color:var(--acc)}
+.rbt{font-size:12px;color:var(--sub);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block}
+.cinput{padding:8px 12px 12px;background:var(--surf);border-top:1px solid var(--bdr);flex-shrink:0;position:fixed;bottom:0;left:0;right:0;z-index:10}
+.ibox{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--bdr);border-radius:12px;padding:7px 10px}
+.ibox input{flex:1;background:none;border:none;outline:none;color:var(--txt);font-size:13px;min-width:0}
+.ibox input::placeholder{color:var(--dim)}
+.icobtn{background:none;border:none;font-size:15px;color:var(--sub);padding:2px;flex-shrink:0}
+.sndbtn{background:var(--dim);border:none;border-radius:8px;padding:7px 12px;font-size:11px;font-weight:900;font-family:"DM Mono",monospace;color:var(--surf);flex-shrink:0;transition:all .15s;opacity:.4}
+.sndbtn.ready{background:var(--acc);color:var(--bg);opacity:1}
+.baddst{width:100%;background:var(--acc-lo);border:1.5px dashed var(--acc-md);border-radius:10px;padding:10px;color:var(--acc);font-size:13px;font-weight:800;font-family:"DM Mono",monospace}
+.stcard{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--bdr);border-radius:11px;padding:12px 14px;cursor:pointer;margin-bottom:8px}
+#adminview{flex:1;overflow-y:auto;display:none;padding-bottom:20px}
+.ainner{padding:16px 14px;max-width:700px;margin:0 auto}
+.sgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.scard{background:var(--card);border:1px solid var(--bdr);border-radius:12px;padding:13px 14px}
+.ucard{background:var(--card);border:1px solid var(--bdr);border-radius:11px;padding:12px 13px;display:flex;align-items:center;gap:11px;margin-bottom:8px}
+.movl{position:fixed;inset:0;background:#0009;z-index:50;display:none;align-items:center;justify-content:center;padding:16px}
+.mbox{background:var(--surf);border:1px solid var(--bdr);border-radius:16px;padding:22px;width:100%;max-width:340px;box-shadow:0 24px 72px #000c;animation:fadeUp .22s ease}
+.mtitle{font-size:16px;font-weight:900;color:var(--txt);margin-bottom:14px}
+.mbtns{display:flex;gap:10px;margin-top:14px}
+.bcnl{flex:1;background:none;border:1px solid var(--bdr);color:var(--sub);border-radius:9px;padding:9px 0;font-size:12px;font-family:"DM Mono",monospace}
+.bkok{flex:2;background:var(--acc);border:none;color:var(--bg);border-radius:9px;padding:9px 0;font-size:12px;font-weight:900;font-family:"DM Mono",monospace}
+.svbox{background:var(--surf);border:1px solid var(--bdr);border-radius:20px;padding:26px 22px;width:100%;max-width:340px;position:relative;animation:fadeUp .22s ease}
+.svclose{position:absolute;top:14px;right:14px;background:var(--card);border:1px solid var(--bdr);border-radius:50%;width:30px;height:30px;font-size:14px;color:var(--sub)}
+.atabs{display:flex;border-bottom:1px solid var(--bdr);margin-bottom:14px}
+.atab{background:none;border:none;padding:8px 14px;font-size:12px;font-weight:500;color:var(--sub);border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s}
+.atab.active{color:var(--acc);font-weight:800;border-bottom-color:var(--acc)}
+
+
+/* EMOJI REACTIONS */
+.reactions{display:flex;flex-wrap:wrap;gap:3px;margin-top:4px}
+.reaction-btn{background:var(--card);border:1px solid var(--bdr);border-radius:20px;padding:2px 8px;font-size:12px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:3px}
+.reaction-btn:hover{border-color:var(--acc-md);background:var(--acc-lo)}
+.reaction-btn.mine{background:var(--acc-lo);border-color:var(--acc-md)}
+.reaction-btn span{font-size:10px;color:var(--sub);font-family:'DM Mono',monospace}
+.emoji-picker{position:absolute;background:var(--surf);border:1px solid var(--bdr);border-radius:12px;padding:8px;display:none;z-index:40;box-shadow:0 8px 24px #000a;flex-wrap:wrap;gap:4px;width:200px}
+.emoji-picker.show{display:flex}
+.emoji-opt{font-size:20px;cursor:pointer;padding:4px;border-radius:6px;transition:background .1s}
+.emoji-opt:hover{background:var(--card)}
+
+/* VOICE NOTE */
+.voice-bubble{display:flex;align-items:center;gap:8px;padding:8px 12px;min-width:160px}
+.voice-play{background:none;border:none;font-size:18px;cursor:pointer;flex-shrink:0;color:inherit}
+.voice-wave{flex:1;height:28px;display:flex;align-items:center;gap:2px}
+.voice-wave span{display:inline-block;width:3px;border-radius:3px;background:currentColor;opacity:.6;animation:none}
+.voice-wave.playing span{animation:wave .6s ease-in-out infinite alternate}
+.voice-wave span:nth-child(2){animation-delay:.1s} .voice-wave span:nth-child(3){animation-delay:.2s}
+.voice-wave span:nth-child(4){animation-delay:.3s} .voice-wave span:nth-child(5){animation-delay:.4s}
+.voice-wave span:nth-child(6){animation-delay:.5s} .voice-wave span:nth-child(7){animation-delay:.6s}
+@keyframes wave{from{height:4px}to{height:20px}}
+.voice-dur{font-size:11px;opacity:.7;font-family:'DM Mono',monospace;flex-shrink:0}
+.rec-btn{background:var(--red-lo);border:1px solid #ff4d4d40;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;cursor:pointer;transition:all .2s}
+.rec-btn.recording{background:var(--red);animation:recpulse 1s infinite}
+@keyframes recpulse{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+.rec-indicator{display:none;align-items:center;gap:8px;padding:6px 12px;background:var(--red-lo);border-top:1px solid #ff4d4d30;flex-shrink:0}
+.rec-indicator.show{display:flex}
+.rec-dot{width:8px;height:8px;border-radius:50%;background:var(--red);animation:recpulse 1s infinite}
+.rec-timer{font-size:12px;color:var(--red);font-family:'DM Mono',monospace;font-weight:700}
+
+/* PIN MESSAGE */
+.pin-bar{display:none;align-items:center;gap:8px;padding:7px 14px;background:var(--acc-lo);border-bottom:1px solid var(--acc-md);flex-shrink:0;cursor:pointer}
+.pin-bar.show{display:flex}
+.pin-icon{font-size:14px;flex-shrink:0}
+.pin-text{font-size:12px;color:var(--acc);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600}
+.pin-close{background:none;border:none;font-size:14px;color:var(--acc-md);cursor:pointer;flex-shrink:0}
+
+
+/* ── VOICE CHANNEL ─────────────────────────────────────── */
+.vc-section{padding:0 8px 8px}
+.vc-label{font-size:10px;font-weight:700;color:var(--dim);letter-spacing:1.4px;padding:8px 10px 5px;font-family:"DM Mono",monospace;display:flex;align-items:center;justify-content:space-between}
+.vc-item{width:100%;display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:8px;border:none;font-size:13px;background:transparent;color:var(--sub);margin-bottom:2px;transition:all .12s;text-align:left;cursor:pointer}
+.vc-item:hover{background:var(--card);color:var(--txt)}
+.vc-item.active-vc{background:#4a8eff20;color:var(--blue)}
+.vc-item-icon{font-size:15px;flex-shrink:0}
+.vc-item-name{flex:1;font-weight:600}
+.vc-members{display:flex;flex-direction:column;gap:2px;padding-left:20px}
+.vc-member{display:flex;align-items:center;gap:6px;padding:3px 8px;border-radius:6px;font-size:12px;color:var(--sub)}
+.vc-member.speaking{color:var(--acc)}
+
+/* Voice Call UI */
+#vcall-bar{display:none;position:fixed;bottom:0;left:0;right:0;z-index:100;background:var(--card);border-top:2px solid var(--blue);padding:10px 16px;flex-direction:column;gap:8px;box-shadow:0 -4px 24px #0008}
+#vcall-bar.show{display:flex}
+.vcall-header{display:flex;align-items:center;gap:10px}
+.vcall-status{flex:1}
+.vcall-name{font-size:13px;font-weight:800;color:var(--txt)}
+.vcall-info{font-size:11px;color:var(--sub);font-family:"DM Mono",monospace}
+.vcall-controls{display:flex;gap:10px;justify-content:center}
+.vc-btn{width:48px;height:48px;border-radius:50%;border:none;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.vc-btn.mute{background:#ff9f4330;color:var(--org)}
+.vc-btn.mute.active{background:var(--org);color:#fff}
+.vc-btn.deafen{background:#4a8eff20;color:var(--blue)}
+.vc-btn.deafen.active{background:var(--blue);color:#fff}
+.vc-btn.leave{background:var(--red);color:#fff;width:56px;height:56px;font-size:22px}
+.vc-btn.leave:active{filter:brightness(.85)}
+.vcall-members{display:flex;gap:8px;flex-wrap:wrap}
+.vc-peer{display:flex;flex-direction:column;align-items:center;gap:4px;position:relative}
+.vc-peer-av{border:2px solid var(--dim);border-radius:50%;padding:2px;transition:border-color .3s}
+.vc-peer-av.speaking{border-color:var(--acc)}
+.vc-peer-name{font-size:10px;color:var(--sub);text-align:center;max-width:50px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.vc-peer-mic{position:absolute;bottom:6px;right:0;font-size:10px}
+
+/* VC join banner */
+.vc-join-banner{background:var(--blue-lo);border:1px solid #4a8eff30;border-radius:10px;padding:10px 14px;margin:8px;display:flex;align-items:center;justify-content:space-between;display:none}
+.vc-join-banner.show{display:flex}
+.vc-join-info{font-size:12px;color:var(--txt)}
+.vc-join-btn{background:var(--blue);color:#fff;border:none;border-radius:7px;padding:6px 14px;font-size:12px;font-weight:700;font-family:"DM Mono",monospace;cursor:pointer}
+
+.img-msg{max-width:220px;max-height:180px;border-radius:10px;cursor:pointer;display:block;margin-top:4px}
+.img-modal{position:fixed;inset:0;background:#000d;z-index:200;display:none;align-items:center;justify-content:center}
+.img-modal img{max-width:95vw;max-height:90vh;border-radius:10px;object-fit:contain}
+.img-close{position:absolute;top:16px;right:16px;background:var(--card);border:1px solid var(--bdr);border-radius:50%;width:36px;height:36px;font-size:18px;color:var(--txt);display:flex;align-items:center;justify-content:center}
+.msg-actions{display:none;gap:4px;margin-top:3px}
+.mrow:hover .msg-actions{display:flex}
+.mrow .msg-actions button{background:var(--card);border:1px solid var(--bdr);border-radius:6px;padding:2px 7px;font-size:11px;color:var(--sub);cursor:pointer}
+.upload-progress{height:3px;background:var(--acc-lo);border-radius:3px;margin-top:6px;overflow:hidden;display:none}
+.upload-bar{height:100%;background:var(--acc);border-radius:3px;transition:width .3s}
+
+#toast{position:fixed;top:14px;right:14px;z-index:999;padding:10px 16px;border-radius:10px;font-weight:700;font-size:13px;box-shadow:0 8px 32px #0008;animation:toastIn .2s ease;display:none}
+</style>
+</head>
+<body>
+<div id="login-page" class="auth-page" style="display:flex">
+  <div class="abg"></div><div class="agr"></div>
+  <div class="abox">
+    <div class="alogo"><div class="alogo-ic">TC</div><span class="alogo-tx">TeamChat</span></div>
+    <div class="atitle">Selamat Datang 👋</div>
+    <p class="asub">Platform komunikasi tim Anda</p>
+    <div class="aerr" id="lerr"></div>
+    <label class="fl">EMAIL</label>
+    <input class="fi" id="lemail" type="email" placeholder="nama@perusahaan.com"/>
+    <label class="fl">PASSWORD</label>
+    <input class="fi" id="lpass" type="password" placeholder="Password" onkeydown="if(event.key==='Enter')doLogin()"/>
+    <button class="btnp" onclick="doLogin()">Masuk</button>
+    <div class="adiv">atau</div>
+    <p class="asw">Belum punya akun? <a onclick="showReg()">Daftar sekarang</a></p>
+  </div>
+</div>
+<div id="reg-page" class="auth-page">
+  <div class="abg"></div><div class="agr"></div>
+  <div class="abox" style="max-width:440px">
+    <div class="alogo"><div class="alogo-ic">TC</div><span class="alogo-tx">TeamChat</span></div>
+    <div class="atitle">Buat Akun ✨</div>
+    <p class="asub">Bergabung dengan tim Anda</p>
+    <div class="aerr" id="rerr"></div>
+    <label class="fl">NAMA LENGKAP</label><input class="fi" id="rname" type="text" placeholder="Nama lengkap"/>
+    <label class="fl">EMAIL</label><input class="fi" id="remail" type="email" placeholder="nama@perusahaan.com"/>
+    <label class="fl">DEPARTEMEN</label>
+    <select class="fs" id="rdept"><option>Engineering</option><option>Marketing</option><option>Design</option><option>Sales</option><option>HR</option></select>
+    <label class="fl">PASSWORD</label><input class="fi" id="rpass" type="password" placeholder="Min. 6 karakter"/>
+    <label class="fl">KONFIRMASI PASSWORD</label><input class="fi" id="rpass2" type="password" placeholder="Ulangi password"/>
+    <button class="btnp" onclick="doRegister()">Buat Akun</button>
+    <div class="adiv">atau</div>
+    <p class="asw">Sudah punya akun? <a onclick="showLogin()">Masuk di sini</a></p>
+  </div>
+</div>
+<div id="app">
+  <div id="topbar">
+    <div class="brand">TC</div>
+    <span style="font-size:13px;font-weight:800;color:var(--txt);flex-shrink:0">TeamChat</span>
+    <div style="display:flex;gap:4px">
+      <button class="navbtn active" id="nvchat" onclick="switchView('chat')">💬 Chat</button>
+      <button class="navbtn" id="nvadmin" onclick="switchView('admin')">⚙️ Admin</button>
+    </div>
+    <div class="chip" onclick="openProf()">
+      <div id="topav" style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#00d68f30,#4a8eff30);border:1.5px solid var(--bdr);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--acc);font-family:'DM Mono',monospace;position:relative;flex-shrink:0"></div>
+      <div style="display:flex;flex-direction:column;line-height:1.2"><span class="cnm" id="topnm"></span><span class="crl" id="toprl"></span></div>
+    </div>
+    <button class="btnout" onclick="doLogout()">⏏</button>
+  </div>
+  <div id="chatview" style="display:flex;flex:1;overflow:hidden;min-height:0">
+    <div class="cwrap">
+      <div class="sovl" id="sovl" onclick="if(event.target===this||event.target.classList.contains('ovbg'))closeSidebar()">
+        <div class="sidebar">
+          <div id="srings"></div>
+          <div class="stabs">
+            <button class="stab active" id="sttch" onclick="switchTab('ch')">Channel</button>
+            <button class="stab" id="sttdm" onclick="switchTab('dm')">DM</button>
+            <button class="stab" id="sttst" onclick="switchTab('st')">Story</button>
+          </div>
+          <div id="tabch" class="sbody">
+            <div style="padding:6px 2px 4px"><div style="display:flex;align-items:center;background:var(--card);border:1px solid var(--bdr);border-radius:8px;padding:5px 9px;gap:6px"><span style="color:var(--dim);font-size:11px">🔍</span><input id="chsearch" placeholder="Cari channel..." oninput="filterCh(this.value)" style="flex:1;background:none;border:none;outline:none;color:var(--txt);font-size:12px"/></div></div>
+            <div class="slbl">CHANNELS</div><div id="chlist"></div>
+            
+            <div class="vc-section">
+              <div class="vc-label">
+                VOICE CHANNELS
+                <button onclick="createVC()" style="background:none;border:none;color:var(--dim);font-size:16px;cursor:pointer;font-weight:700" title="Buat voice channel">+</button>
+              </div>
+              <div id="vc-list">
+                <button class="vc-item" onclick="joinVC('umum')" id="vci-umum">
+                  <span class="vc-item-icon">🔊</span>
+                  <span class="vc-item-name">Umum</span>
+                  <span id="vcc-umum" style="font-size:10px;color:var(--sub);font-family:'DM Mono',monospace"></span>
+                </button>
+                <button class="vc-item" onclick="joinVC('meeting')" id="vci-meeting">
+                  <span class="vc-item-icon">🔊</span>
+                  <span class="vc-item-name">Meeting</span>
+                  <span id="vcc-meeting" style="font-size:10px;color:var(--sub);font-family:'DM Mono',monospace"></span>
+                </button>
+              </div>
+              <div class="vc-join-banner" id="vc-banner">
+                <div class="vc-join-info">
+                  <div style="font-weight:700;color:var(--blue)" id="vc-banner-name"></div>
+                  <div id="vc-banner-members" style="color:var(--sub)"></div>
+                </div>
+                <button class="vc-join-btn" onclick="joinCurrentVC()">Gabung</button>
+              </div>
+            </div>
+
+            <div class="slbl" style="margin-top:10px">ONLINE · <span id="onlinecnt">0</span></div><div id="onlinelist"></div>
+          </div>
+          <div id="tabdm" class="sbody" style="display:none"><div class="slbl">PESAN LANGSUNG</div><div id="dmlist"></div></div>
+          <div id="tabst" style="display:none;overflow-y:auto;flex:1;padding:12px"></div>
+        </div>
+        <div class="ovbg"></div>
+      </div>
+      <div class="cmain">
+        <div class="chdr">
+          <button class="mbtn" onclick="openSidebar()">☰</button>
+          <span id="chaticon" style="color:var(--sub);font-size:14px;flex-shrink:0"></span>
+          <div style="flex:1;min-width:0">
+            <div style="font-weight:800;color:var(--txt);font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" id="chattitle"></div>
+            <div style="font-size:10px;color:var(--sub);margin-top:1px" id="chatsub"></div>
+          </div>
+          <button style="background:var(--card);border:1px solid var(--bdr);border-radius:8px;padding:5px 8px;font-size:12px;color:var(--sub);flex-shrink:0">🔔</button>
+        </div>
+        <div class="pin-bar" id="pinbar" onclick="scrollToPin()"><span class="pin-icon">📌</span><span class="pin-text" id="pintxt"></span><button class="pin-close" onclick="event.stopPropagation();unpin()">✕</button></div>
+        <div class="msgs" id="msgs"></div>
+        <div id="rbar">
+          <div style="color:var(--acc);font-size:14px">↩</div>
+          <div class="rbi"><span class="rbn" id="rbn"></span><span class="rbt" id="rbt"></span></div>
+          <button style="background:none;border:none;font-size:16px;color:var(--sub)" onclick="clearReply()">✕</button>
+        </div>
+        <div class="rec-indicator" id="recindicator"><div class="rec-dot"></div><span class="rec-timer" id="rectimer">0:00</span><span style="font-size:12px;color:var(--red)">Merekam... Tap 🎤 untuk kirim</span></div>
+        <div class="cinput">
+          <div class="ibox">
+            <button class="icobtn" onclick="openAddStory()" title="Post Story">📸</button>
+            <button class="icobtn" onclick="document.getElementById('imgpicker').click()" title="Kirim foto">📷</button>
+            <input id="msginput" placeholder="" oninput="toggleSend()" onkeydown="handleEnter(event)"/>
+            <button class="icobtn">😊</button>
+            <button class="rec-btn" id="recbtn" onclick="toggleRecord()" title="Kirim pesan suara">🎤</button>
+            <button class="sndbtn" id="sndbtn" onclick="sendMsg()">KIRIM</button>
+            <div class="upload-progress" id="upprog"><div class="upload-bar" id="upbar"></div></div>
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="adminview">
+    <div class="ainner">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px;gap:10px;flex-wrap:wrap">
+        <div><div style="font-size:18px;font-weight:900;color:var(--txt)">Panel Admin</div><div style="font-size:12px;color:var(--sub);margin-top:3px">Kelola tim secara real-time</div></div>
+        <div style="display:flex;gap:8px">
+          <button onclick="openAddCh()" style="background:var(--blue-lo);color:var(--blue);border:1px solid #4a8eff30;border-radius:9px;padding:8px 12px;font-size:12px;font-weight:700;font-family:'DM Mono',monospace">+ Channel</button>
+          <button onclick="openAddMem()" style="background:var(--acc);color:var(--bg);border:none;border-radius:9px;padding:8px 12px;font-size:12px;font-weight:900;font-family:'DM Mono',monospace">+ Anggota</button>
+        </div>
+      </div>
+      <div class="sgrid" id="sgrid"></div>
+      <div class="atabs">
+        <button class="atab active" onclick="admTab('mem',this)">👥 Anggota</button>
+        <button class="atab" onclick="admTab('ch',this)">💬 Channel</button>
+      </div>
+      <div id="admmem"></div>
+      <div id="admch" style="display:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px"></div>
+    </div>
+  </div>
+</div>
+<!-- MODALS -->
+<div class="movl" id="profmod" onclick="if(event.target===this)closeProf()">
+  <div class="mbox">
+    <div class="mtitle">👤 Edit Profil</div>
+    <div id="profprev" style="display:flex;justify-content:center;margin-bottom:14px"></div>
+    <label class="fl">NAMA LENGKAP</label><input class="fi" id="pname" type="text"/>
+    <label class="fl">DEPARTEMEN</label>
+    <select class="fs" id="pdept"><option>Engineering</option><option>Marketing</option><option>Design</option><option>Sales</option><option>HR</option></select>
+    <label class="fl">STATUS</label>
+    <select class="fs" id="pstatus"><option value="online">🟢 Online</option><option value="away">🟡 Away</option><option value="offline">⚫ Offline</option></select>
+    <label class="fl">AVATAR EMOJI (opsional)</label>
+    <input class="fi" id="pemoji" placeholder="Contoh: 😊 🚀" oninput="prevEmoji()"/>
+    <div class="mbtns"><button class="bcnl" onclick="closeProf()">Batal</button><button class="bkok" onclick="saveProf()">Simpan</button></div>
+  </div>
+</div>
+<div class="movl" id="stmod" onclick="if(event.target===this)closeStMod()">
+  <div class="mbox">
+    <div class="mtitle">📸 Tambah Story</div>
+    <p style="font-size:12px;color:var(--sub);margin-bottom:12px">Hilang otomatis setelah 24 jam</p>
+    <label class="fl">TEKS STORY</label>
+    <textarea class="fi" id="sttext" rows="3" placeholder="Apa yang ingin Anda bagikan?" style="resize:none;height:80px"></textarea>
+    <label class="fl">EMOJI (opsional)</label><input class="fi" id="stemoji" placeholder="Contoh: 🎉 🔥 💪"/>
+    <div class="mbtns"><button class="bcnl" onclick="closeStMod()">Batal</button><button class="bkok" onclick="postStory()">Post Story</button></div>
+  </div>
+</div>
+<div class="movl" id="stvwr" onclick="if(event.target===this)this.style.display='none'"></div>
+<div class="movl" id="chmod" onclick="if(event.target===this)closeAddCh()">
+  <div class="mbox">
+    <div class="mtitle">➕ Buat Channel Baru</div>
+    <label class="fl">NAMA CHANNEL</label><input class="fi" id="newchname" placeholder="Contoh: project-alpha"/>
+    <label class="fl">ICON</label>
+    <select class="fs" id="newchicon"><option value="#"># Umum</option><option value="📢">📢 Pengumuman</option><option value="🎯">🎯 Target</option><option value="💡">💡 Ide</option><option value="🚀">🚀 Project</option></select>
+    <div class="mbtns"><button class="bcnl" onclick="closeAddCh()">Batal</button><button class="bkok" onclick="addChannel()">Buat</button></div>
+  </div>
+</div>
+<div class="movl" id="memmod" onclick="if(event.target===this)closeAddMem()">
+  <div class="mbox">
+    <div class="mtitle">➕ Tambah Anggota</div>
+    <label class="fl">NAMA</label><input class="fi" id="mname" placeholder="Nama lengkap"/>
+    <label class="fl">EMAIL</label><input class="fi" id="memail" type="email" placeholder="email@perusahaan.com"/>
+    <label class="fl">PASSWORD AWAL</label><input class="fi" id="mpass" type="password" placeholder="Min. 6 karakter"/>
+    <label class="fl">ROLE</label><select class="fs" id="mrole"><option>Member</option><option>Manager</option><option>Admin</option></select>
+    <label class="fl">DEPARTEMEN</label><select class="fs" id="mdept"><option>Engineering</option><option>Marketing</option><option>Design</option><option>Sales</option><option>HR</option></select>
+    <div class="mbtns"><button class="bcnl" onclick="closeAddMem()">Batal</button><button class="bkok" onclick="addMember()">Tambahkan</button></div>
+  </div>
+</div>
+
+<div class="img-modal" id="imgmodal" onclick="this.style.display='none'">
+  <button class="img-close" onclick="document.getElementById('imgmodal').style.display='none'">✕</button>
+  <img id="imgmodal-img" src="" alt=""/>
+</div>
+<input type="file" id="imgpicker" accept="image/*" style="display:none" onchange="handleImgPick(this)"/>
+<div class="movl" id="editmod" onclick="if(event.target===this)closeEdit()">
+  <div class="mbox">
+    <div class="mtitle">✏️ Edit Pesan</div>
+    <textarea class="fi" id="edittxt" rows="4" style="resize:none;height:100px"></textarea>
+    <div class="mbtns">
+      <button class="bcnl" onclick="closeEdit()">Batal</button>
+      <button class="bkok" onclick="saveEdit()">Simpan</button>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- VOICE CALL BAR -->
+<div id="vcall-bar">
+  <div class="vcall-header">
+    <div style="font-size:20px">🔊</div>
+    <div class="vcall-status">
+      <div class="vcall-name" id="vcall-name">Voice Channel</div>
+      <div class="vcall-info" id="vcall-info">Terhubung</div>
+    </div>
+  </div>
+  <div class="vcall-members" id="vcall-members"></div>
+  <div class="vcall-controls">
+    <button class="vc-btn mute" id="btn-mute" onclick="toggleMute()" title="Mute/Unmute">🎙️</button>
+    <button class="vc-btn leave" onclick="leaveVC()" title="Keluar">📵</button>
+    <button class="vc-btn deafen" id="btn-deafen" onclick="toggleDeafen()" title="Deaf/Undeaf">🔊</button>
+  </div>
+</div>
+
+<div id="emojipicker" class="emoji-picker">
+  <span class="emoji-opt" onclick="addReaction(currentReactMsg,'👍')">👍</span>
+  <span class="emoji-opt" onclick="addReaction(currentReactMsg,'❤️')">❤️</span>
+  <span class="emoji-opt" onclick="addReaction(currentReactMsg,'😂')">😂</span>
+  <span class="emoji-opt" onclick="addReaction(currentReactMsg,'😮')">😮</span>
+  <span class="emoji-opt" onclick="addReaction(currentReactMsg,'😢')">😢</span>
+  <span class="emoji-opt" onclick="addReaction(currentReactMsg,'🔥')">🔥</span>
+  <span class="emoji-opt" onclick="addReaction(currentReactMsg,'🎉')">🎉</span>
+  <span class="emoji-opt" onclick="addReaction(currentReactMsg,'👏')">👏</span>
+  <span class="emoji-opt" onclick="addReaction(currentReactMsg,'💪')">💪</span>
+  <span class="emoji-opt" onclick="addReaction(currentReactMsg,'✅')">✅</span>
+</div>
+
+
+<div id="install-banner" style="display:none;position:fixed;bottom:70px;left:12px;right:12px;z-index:200;
+  background:linear-gradient(135deg,#00d68f,#00a86b);border-radius:14px;padding:14px 16px;
+  align-items:center;gap:12px;box-shadow:0 8px 32px #00d68f40;">
+  <div style="font-size:28px">📱</div>
+  <div style="flex:1">
+    <div style="font-size:13px;font-weight:800;color:#0b0d14">Install TeamChat</div>
+    <div style="font-size:11px;color:#0b0d1490;margin-top:2px">Tambah ke homescreen seperti APK</div>
+  </div>
+  <button onclick="installPWA()" style="background:#0b0d14;color:#00d68f;border:none;border-radius:9px;
+    padding:8px 14px;font-size:12px;font-weight:900;font-family:'DM Mono',monospace;cursor:pointer;flex-shrink:0;">
+    INSTALL
+  </button>
+  <button onclick="this.parentNode.style.display='none'" style="background:none;border:none;
+    font-size:18px;color:#0b0d1460;cursor:pointer;flex-shrink:0;">✕</button>
+</div>
+
+<div id="toast"></div>
+<script>
+firebase.initializeApp({
+  apiKey:"AIzaSyC9ey32b6vC66Ch3BLF2C3JvSMmv0p0KJU",
+  authDomain:"teamchat-perusahaan-saya.firebaseapp.com",
+  projectId:"teamchat-perusahaan-saya",
+  storageBucket:"teamchat-perusahaan-saya.firebasestorage.app",
+  messagingSenderId:"593346653209",
+  appId:"1:593346653209:web:f2c7b51b2308d3b9fc0e88"
+});
+const auth=firebase.auth(),db=firebase.firestore(),storage=firebase.storage();
+let me=null,myP=null,activeCh="general",activeDM=null;
+let unsubMsg=null,unsubMem=null,unsubSt=null;
+let allMem=[],allSt=[],replyTo=null;
+const CHANNELS=[{id:"general",name:"general",icon:"#"},{id:"engineering",name:"engineering",icon:"#"},{id:"marketing",name:"marketing",icon:"#"},{id:"design",name:"design",icon:"#"},{id:"announcements",name:"announcements",icon:"📢"}];
+const $=id=>document.getElementById(id);
+const v=id=>($( id)||{value:""}).value.trim();
+const sc=s=>s==="online"?"#00d68f":s==="away"?"#ff9f43":"#383e5a";
+const rc=r=>r==="Admin"?"#00d68f":r==="Manager"?"#4a8eff":"#7a84a0";
+const esc=s=>String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+function av(u,sz=36){
+  const fs=Math.round(sz*.32),ds=Math.round(sz*.28);
+  const dot=`<span style="position:absolute;bottom:0;right:0;width:${ds}px;height:${ds}px;border-radius:50%;background:${sc(u.status||"offline")};border:2px solid var(--surf)"></span>`;
+  if(u.emojiAv) return `<div style="position:relative;flex-shrink:0;width:${sz}px;height:${sz}px;border-radius:50%;background:var(--card);border:1.5px solid var(--bdr);display:flex;align-items:center;justify-content:center;font-size:${Math.round(sz*.5)}px">${u.emojiAv}${dot}</div>`;
+  return `<div style="position:relative;flex-shrink:0;width:${sz}px;height:${sz}px;border-radius:50%;background:linear-gradient(135deg,#00d68f30,#4a8eff30);border:1.5px solid var(--bdr);display:flex;align-items:center;justify-content:center;font-size:${fs}px;font-weight:700;color:#00d68f;font-family:'DM Mono',monospace">${esc(u.avatar||"?")}${dot}</div>`;
+}
+let toastT;
+function toast(msg,type="ok"){const el=$("toast");el.textContent=(type==="err"?"🗑 ":"✅ ")+msg;el.style.background=type==="err"?"#ff4d4d":"#00d68f";el.style.color=type==="err"?"#fff":"#0b0d14";el.style.display="block";clearTimeout(toastT);toastT=setTimeout(()=>el.style.display="none",2800);}
+function showErr(el,msg){el.textContent=msg;el.style.display="block";}
+function showLogin(){$("reg-page").style.display="none";$("login-page").style.display="flex";}
+function showReg(){$("login-page").style.display="none";$("reg-page").style.display="flex";}
+auth.onAuthStateChanged(async user=>{
+  if(user){
+    me=user;
+    const snap=await db.collection("users").doc(user.uid).get();
+    if(snap.exists){myP=snap.data();}
+    else{myP={uid:user.uid,name:user.displayName||user.email.split("@")[0],email:user.email,role:"Member",dept:"General",avatar:(user.displayName||user.email).slice(0,2).toUpperCase(),status:"online",emojiAv:""};await db.collection("users").doc(user.uid).set(myP);}
+    db.collection("users").doc(user.uid).update({status:"online"}).catch(()=>{});
+    enterApp();
+  }else{me=null;myP=null;$("app").style.display="none";$("login-page").style.display="flex";$("reg-page").style.display="none";}
+});
+function doLogin(){
+  const el=$("lerr");el.style.display="none";
+  auth.signInWithEmailAndPassword(v("lemail"),v("lpass")).catch(()=>{el.textContent="Email atau password salah.";el.style.display="block";});
+}
+function doRegister(){
+  const nm=v("rname"),em=v("remail"),dp=v("rdept"),pw=v("rpass"),pw2=v("rpass2");
+  const el=$("rerr");el.style.display="none";
+  if(!nm||!em||!pw)return showErr(el,"Semua field wajib diisi.");
+  if(pw.length<6)return showErr(el,"Password min. 6 karakter.");
+  if(pw!==pw2)return showErr(el,"Password tidak cocok.");
+  auth.createUserWithEmailAndPassword(em,pw).then(c=>{
+    c.user.updateProfile({displayName:nm});
+    const a=nm.split(" ").map(w=>w[0]).join("").slice(0,2).toUpperCase();
+    return db.collection("users").doc(c.user.uid).set({uid:c.user.uid,name:nm,email:em,role:"Member",dept:dp,avatar:a,status:"online",emojiAv:"",createdAt:firebase.firestore.FieldValue.serverTimestamp()});
+  }).catch(e=>showErr(el,e.code==="auth/email-already-in-use"?"Email sudah terdaftar.":e.message));
+}
+function doLogout(){
+  if(myP)db.collection("users").doc(me.uid).update({status:"offline"}).catch(()=>{});
+  if(unsubMsg)unsubMsg();if(unsubMem)unsubMem();if(unsubSt)unsubSt();
+  auth.signOut();
+}
+function enterApp(){
+  $("login-page").style.display="none";$("reg-page").style.display="none";$("app").style.display="flex";
+  updateTopbar();listenMem();listenSt();loadCh();setChannel("general");listenVCList();
+}
+function updateTopbar(){
+  $("topav").innerHTML=av(myP,30);
+  $("topnm").textContent=myP.name.split(" ")[0];
+  $("toprl").textContent=myP.role;
+}
+function listenMem(){
+  if(unsubMem)unsubMem();
+  unsubMem=db.collection("users").onSnapshot(snap=>{
+    allMem=snap.docs.map(d=>d.data());
+    const f=allMem.find(m=>m.uid===me.uid);if(f)myP={...myP,...f};
+    renderCh();renderDM();renderOnline();renderRings();
+  });
+}
+function listenSt(){
+  if(unsubSt)unsubSt();
+  unsubSt=db.collection("stories").orderBy("createdAt","desc").onSnapshot(snap=>{
+    const now=Date.now();
+    allSt=snap.docs.map(d=>d.data()).filter(s=>s.createdAt&&(now-s.createdAt.toMillis())<86400000);
+    renderRings();
+    if($("tabst").style.display!=="none")renderStTab();
+  });
+}
+function listenMsg(colRef){
+  if(unsubMsg)unsubMsg();
+  unsubMsg=colRef.orderBy("createdAt","asc").onSnapshot(snap=>{
+    renderMsgs(snap.docs.map(d=>({id:d.id,...d.data()})));
+  });
+}
+function loadCh(){
+  db.collection("channelList").get().then(snap=>{
+    snap.docs.forEach(d=>{const data=d.data();if(!CHANNELS.find(c=>c.id===data.id))CHANNELS.push({id:data.id,name:data.name,icon:data.icon||"#"});});
+    renderCh();
+  }).catch(()=>renderCh());
+}
+function renderCh(q=""){
+  const el=$("chlist");if(!el)return;el.innerHTML="";
+  CHANNELS.filter(c=>c.name.includes((q||"").toLowerCase())).forEach(ch=>{
+    const btn=document.createElement("button");
+    btn.className="sitm"+(ch.id===activeCh&&!activeDM?" active":"");
+    btn.innerHTML=`<span class="sil"><span style="opacity:.65">${ch.icon}</span><span class="sin">${ch.name}</span></span>`;
+    btn.onclick=()=>{setChannel(ch.id);closeSidebar();};
+    el.appendChild(btn);
+  });
+}
+function filterCh(q){renderCh(q);}
+function setChannel(id){
+  activeCh=id;activeDM=null;
+  const ch=CHANNELS.find(c=>c.id===id)||{icon:"#",name:id};
+  $("chaticon").textContent=ch.icon;$("chattitle").textContent=ch.name;
+  $("chatsub").textContent="channel publik";$("chatsub").style.color="var(--sub)";
+  $("msginput").placeholder=`Pesan ke #${ch.name}...`;
+  clearReply();listenMsg(db.collection("channels").doc(id).collection("messages"));renderCh();loadPin();
+}
+function renderDM(){
+  const el=$("dmlist");if(!el)return;
+  const others=allMem.filter(m=>m.uid!==me.uid);
+  el.innerHTML=others.length===0?`<div style="padding:12px;font-size:12px;color:var(--dim)">Belum ada anggota lain.</div>`:
+    others.map(u=>`<button class="sitm${activeDM===u.uid?" active":""}" onclick="openDM('${u.uid}')"><span class="sil">${av(u,26)}<span class="sin">${esc(u.name.split(" ")[0])}</span></span><span style="width:7px;height:7px;border-radius:50%;background:${sc(u.status)};flex-shrink:0"></span></button>`).join("");
+}
+function openDM(uid){
+  activeDM=uid;activeCh=null;
+  const user=allMem.find(m=>m.uid===uid);if(!user)return;
+  $("chaticon").innerHTML=av(user,26);$("chattitle").textContent=user.name;
+  $("chatsub").textContent=user.status==="online"?"● online":"● offline";$("chatsub").style.color=sc(user.status);
+  $("msginput").placeholder=`Pesan ke ${user.name.split(" ")[0]}...`;
+  clearReply();loadPin();
+  const dmId=[me.uid,uid].sort().join("_");
+  listenMsg(db.collection("dms").doc(dmId).collection("messages"));
+  renderDM();renderCh();closeSidebar();
+}
+function renderOnline(){
+  const el=$("onlinelist");if(!el)return;
+  const online=allMem.filter(m=>m.status==="online");
+  $("onlinecnt").textContent=online.length;
+  el.innerHTML=online.map(u=>`<div style="display:flex;align-items:center;gap:8px;padding:4px 10px;border-radius:7px">${av(u,22)}<span style="font-size:12px;color:var(--sub);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(u.name.split(" ")[0])}</span></div>`).join("");
+}
+function renderMsgs(msgs){
+  const el=$("msgs");
+  const atBot=el.scrollHeight-el.scrollTop-el.clientHeight<80;
+  el.innerHTML=`<div class="sysmsg">📅 Awal percakapan</div>`;
+  msgs.forEach((msg,i)=>{
+    const isOwn=msg.uid===me.uid,showHead=i===0||msgs[i-1].uid!==msg.uid;
+    const t=msg.createdAt?.toDate?msg.createdAt.toDate().toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-digit"}):"";
+    const rHTML=msg.replyTo?`<div class="rprev${isOwn?" own":""}"><span class="rpnm">${esc(msg.replyTo.senderName||"")}</span><span class="rptx">${esc(msg.replyTo.text||"")}</span></div>`:"";
+    const row=document.createElement("div");
+    row.className="mrow"+(isOwn?" own":"")+(showHead?" msp":"");
+    row.id="msg-"+msg.id;
+    const sname=esc((msg.senderName||"?").replace(/'/g,"&#39;"));
+    const stxt=esc((msg.text||"").replace(/'/g,"&#39;"));
+    // image message
+    const imgHTML = msg.imgURL ? `<img src="${msg.imgURL}" class="img-msg" onclick="viewImg('${msg.imgURL}')"/>` : '';
+    const voiceHTML = msg.voiceURL ? `<div class="voice-bubble"><button class="voice-play" onclick="playVoice('${msg.voiceURL}',this)">▶️</button><div class="voice-wave" id="vw-${msg.id}"><span style="height:8px"></span><span style="height:14px"></span><span style="height:18px"></span><span style="height:12px"></span><span style="height:20px"></span><span style="height:10px"></span><span style="height:16px"></span></div><span class="voice-dur">${msg.voiceDur||'0:00'}</span></div>` : '';
+    row.innerHTML=`<div class="mavc">${showHead?av({avatar:msg.avatar||"?",emojiAv:msg.emojiAv||"",status:"online"},30):""}</div><div class="mbody">${showHead?`<div class="mmeta"><span class="msndr">${esc((msg.senderName||"?").split(" ")[0])}</span><span class="mtime">${t}</span></div>`:""}<div>${rHTML}<div class="mbbl" onclick="setReply('${sname}','${stxt}')">${msg.voiceURL ? "" : esc(msg.text)}</div>${imgHTML}${voiceHTML}</div>
+        <div class="msg-actions">
+          <button onclick="showEmojiPicker(event,'${msg.id}')">😊</button>
+          <button onclick="setReply('${sname}','${stxt}')">↩ Balas</button>
+          <button onclick="pinMsg('${msg.id}','${stxt}')">📌 Pin</button>
+          ${isOwn ? `<button onclick="startEdit('${msg.id}','${stxt.replace(/'/g,'&#39;')}')">✏ Edit</button><button onclick="deleteMsg('${msg.id}')">🗑 Hapus</button>` : ''}
+        </div>
+        ${msg.reactions ? `<div class="reactions">${Object.entries(msg.reactions).map(([emoji,users])=>`<button class="reaction-btn ${users.includes(me.uid)?'mine':''}" onclick="addReaction('${msg.id}','${emoji}')">${emoji}<span>${users.length}</span></button>`).join('')}</div>` : ''}
+        </div>`;
+    el.appendChild(row);
+  });
+  if(atBot||msgs.length<=1)el.scrollTop=el.scrollHeight;
+}
+async function sendMsg(){
+  const inp=$("msginput"),txt=inp.value.trim();if(!txt)return;
+  inp.value="";$("sndbtn").classList.remove("ready");
+  const data={uid:me.uid,senderName:myP.name,avatar:myP.avatar,emojiAv:myP.emojiAv||"",text:txt,createdAt:firebase.firestore.FieldValue.serverTimestamp()};
+  if(replyTo){data.replyTo=replyTo;clearReply();}
+  if(activeDM){const dmId=[me.uid,activeDM].sort().join("_");await db.collection("dms").doc(dmId).collection("messages").add(data);}
+  else if(activeCh){await db.collection("channels").doc(activeCh).collection("messages").add(data);}
+}
+function handleEnter(e){if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();sendMsg();}}
+function toggleSend(){$("sndbtn").classList.toggle("ready",$("msginput").value.trim().length>0);}
+function setReply(senderName,text){replyTo={senderName,text};$("rbar").style.display="flex";$("rbn").textContent=senderName;$("rbt").textContent=text;$("msginput").focus();}
+function clearReply(){replyTo=null;$("rbar").style.display="none";}
+function renderRings(){
+  const el=$("srings");if(!el)return;
+  const myS=allSt.find(s=>s.uid===me.uid),others=allSt.filter(s=>s.uid!==me.uid);
+  el.innerHTML=`<button class="sring${myS?" has":""}" onclick="openAddStory()"><div class="srav">${av(myP,36)}</div><span class="srlb">${myS?"Saya":"+ Story"}</span></button>`+
+    others.map(s=>{const u=allMem.find(m=>m.uid===s.uid)||{avatar:"?",emojiAv:"",status:"offline"};return `<button class="sring has" onclick="viewStory('${s.uid}')"><div class="srav">${av(u,36)}</div><span class="srlb">${esc((allMem.find(m=>m.uid===s.uid)||{name:"?"}).name.split(" ")[0])}</span></button>`;}).join("");
+}
+function renderStTab(){
+  const el=$("tabst");if(!el)return;
+  el.innerHTML=`<button class="baddst" onclick="openAddStory()">+ Tambah Story</button><div style="margin-top:12px">${allSt.length===0?`<div style="text-align:center;padding:30px;color:var(--dim);font-size:13px">Belum ada story hari ini.</div>`:allSt.map(s=>{const u=allMem.find(m=>m.uid===s.uid)||{avatar:"?",emojiAv:"",status:"offline",name:"?"};const t=s.createdAt?.toDate?s.createdAt.toDate().toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-digit"}):"";return `<div class="stcard" onclick="viewStory('${s.uid}')">${av(u,40)}<div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:700;color:var(--txt)">${esc(u.name)}</div><div style="font-size:12px;color:var(--sub);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(s.text||"")}</div>${s.emoji?`<div style="font-size:20px;margin-top:2px">${s.emoji}</div>`:""}</div><span style="font-size:10px;color:var(--dim);flex-shrink:0">${t}</span></div>`;}).join("")}</div>`;
+}
+function openAddStory(){$("stmod").style.display="flex";$("sttext").value="";$("stemoji").value="";}
+function closeStMod(){$("stmod").style.display="none";}
+async function postStory(){
+  const text=v("sttext"),emoji=v("stemoji");
+  if(!text&&!emoji){toast("Isi story dulu!","err");return;}
+  const snap=await db.collection("stories").where("uid","==",me.uid).get();
+  for(const d of snap.docs)await d.ref.delete();
+  await db.collection("stories").add({uid:me.uid,senderName:myP.name,avatar:myP.avatar,emojiAv:myP.emojiAv||"",text,emoji,createdAt:firebase.firestore.FieldValue.serverTimestamp()});
+  closeStMod();toast("Story berhasil dipost!");
+}
+function viewStory(uid){
+  const story=allSt.find(s=>s.uid===uid),user=allMem.find(m=>m.uid===uid)||myP;
+  if(!story)return;
+  const t=story.createdAt?.toDate?story.createdAt.toDate().toLocaleString("id-ID",{hour:"2-digit",minute:"2-digit",day:"numeric",month:"short"}):"";
+  $("stvwr").innerHTML=`<div class="svbox"><button class="svclose" onclick="document.getElementById('stvwr').style.display='none'">✕</button><div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">${av(user,44)}<div><div style="font-weight:800;color:var(--txt);font-size:14px">${esc(user.name)}</div><div style="font-size:11px;color:var(--sub)">${t}</div></div></div>${story.emoji?`<div style="font-size:52px;text-align:center;margin-bottom:10px">${story.emoji}</div>`:""}<div style="font-size:15px;color:var(--txt);line-height:1.6;text-align:center">${esc(story.text||"")}</div>${uid===me.uid?`<button onclick="delMyStory()" style="margin-top:20px;width:100%;background:var(--red-lo);border:1px solid #ff4d4d30;color:var(--red);border-radius:9px;padding:9px;font-size:12px;font-weight:700;font-family:'DM Mono',monospace;cursor:pointer">🗑 Hapus Story Saya</button>`:""}</div>`;
+  $("stvwr").style.display="flex";
+}
+async function delMyStory(){
+  const snap=await db.collection("stories").where("uid","==",me.uid).get();
+  for(const d of snap.docs)await d.ref.delete();
+  $("stvwr").style.display="none";toast("Story dihapus.");
+}
+function openProf(){$("pname").value=myP.name||"";$("pdept").value=myP.dept||"Engineering";$("pstatus").value=myP.status||"online";$("pemoji").value=myP.emojiAv||"";$("profprev").innerHTML=av(myP,64);$("profmod").style.display="flex";}
+function closeProf(){$("profmod").style.display="none";}
+function prevEmoji(){const e=v("pemoji");$("profprev").innerHTML=e?`<div style="width:64px;height:64px;border-radius:50%;background:var(--card);border:2px solid var(--acc);display:flex;align-items:center;justify-content:center;font-size:32px">${e}</div>`:av(myP,64);}
+async function saveProf(){
+  const nm=v("pname"),dp=v("pdept"),st=v("pstatus"),em=v("pemoji");
+  if(!nm){toast("Nama tidak boleh kosong!","err");return;}
+  const a=nm.split(" ").map(w=>w[0]).join("").slice(0,2).toUpperCase();
+  const upd={name:nm,dept:dp,status:st,avatar:a,emojiAv:em};
+  await db.collection("users").doc(me.uid).update(upd);
+  await me.updateProfile({displayName:nm});
+  myP={...myP,...upd};updateTopbar();closeProf();toast("Profil berhasil disimpan!");
+}
+function switchTab(tab){
+  ["ch","dm","st"].forEach(t=>{$("stt"+t).classList.toggle("active",t===tab);$("tab"+t).style.display=t===tab?"block":"none";});
+  if(tab==="st"){$("tabst").style.display="block";renderStTab();}
+  if(tab==="dm")renderDM();
+}
+function switchView(vw){
+  $("chatview").style.display=vw==="chat"?"flex":"none";
+  $("adminview").style.display=vw==="admin"?"block":"none";
+  $("nvchat").classList.toggle("active",vw==="chat");
+  $("nvadmin").classList.toggle("active",vw==="admin");
+  if(vw==="admin")renderAdmin();
+}
+function openSidebar(){$("sovl").classList.add("open");}
+function closeSidebar(){$("sovl").classList.remove("open");}
+function renderAdmin(){
+  const online=allMem.filter(m=>m.status==="online").length;
+  $("sgrid").innerHTML=[{l:"Total Anggota",v:allMem.length,i:"👥",c:"var(--acc)"},{l:"Online",v:online,i:"🟢",c:"var(--blue)"},{l:"Channel",v:CHANNELS.length,i:"💬",c:"var(--org)"},{l:"Story Aktif",v:allSt.length,i:"📸",c:"var(--red)"}].map(s=>`<div class="scard" style="border-left:3px solid ${s.c}"><div style="font-size:18px;margin-bottom:4px">${s.i}</div><div style="font-size:24px;font-weight:900;color:${s.c};font-family:'DM Mono',monospace">${s.v}</div><div style="font-size:11px;color:var(--sub);margin-top:2px">${s.l}</div></div>`).join("");
+  const canEdit=myP?.role==="Admin"||myP?.role==="Manager";
+  $("admmem").innerHTML=allMem.map(u=>`<div class="ucard">${av(u,40)}<div style="flex:1;min-width:0"><div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:3px"><span style="font-size:13px;font-weight:700;color:var(--txt)">${esc(u.name)}</span><span style="font-size:10px;font-weight:800;padding:2px 7px;border-radius:20px;background:${rc(u.role)}18;color:${rc(u.role)};border:1px solid ${rc(u.role)}35;font-family:'DM Mono',monospace">${u.role.toUpperCase()}</span></div><div style="font-size:11px;color:var(--sub)">${esc(u.dept||"")} · <span style="color:${sc(u.status)}">● ${u.status}</span></div></div>${canEdit&&u.uid!==me.uid?`<div style="display:flex;gap:6px;flex-shrink:0"><button style="border-radius:7px;padding:6px 9px;font-size:12px;font-weight:700;border:none;background:var(--blue-lo);color:var(--blue);cursor:pointer" onclick="promoteUser('${u.uid}','${u.role}')">⬆</button>${u.role!=="Admin"?`<button style="border-radius:7px;padding:6px 9px;font-size:12px;font-weight:700;border:none;background:var(--red-lo);color:var(--red);cursor:pointer" onclick="removeUser('${u.uid}')">🗑</button>`:""}</div>`:""}</div>`).join("");
+}
+function admTab(tab,btn){document.querySelectorAll(".atab").forEach(b=>b.classList.remove("active"));btn.classList.add("active");$("admmem").style.display=tab==="mem"?"block":"none";$("admch").style.display=tab==="ch"?"grid":"none";}
+async function promoteUser(uid,role){const next=role==="Member"?"Manager":role==="Manager"?"Admin":"Member";await db.collection("users").doc(uid).update({role:next});toast(`Role diubah ke ${next}.`);}
+async function removeUser(uid){if(!confirm("Hapus anggota ini?"))return;await db.collection("users").doc(uid).delete();toast("Anggota dihapus.","err");}
+function openAddCh(){$("chmod").style.display="flex";$("newchname").value="";}
+function closeAddCh(){$("chmod").style.display="none";}
+async function addChannel(){
+  const name=v("newchname").toLowerCase().replace(/\s+/g,"-").replace(/[^a-z0-9-]/g,""),icon=v("newchicon");
+  if(!name){toast("Nama channel kosong!","err");return;}
+  if(CHANNELS.find(c=>c.id===name)){toast("Channel sudah ada!","err");return;}
+  await db.collection("channelList").doc(name).set({id:name,name,icon,createdBy:me.uid,createdAt:firebase.firestore.FieldValue.serverTimestamp()});
+  CHANNELS.push({id:name,name,icon});closeAddCh();renderCh();setChannel(name);toast(`#${name} dibuat!`);
+}
+function openAddMem(){$("memmod").style.display="flex";$("mname").value=$("memail").value=$("mpass").value="";}
+function closeAddMem(){$("memmod").style.display="none";}
+async function addMember(){
+  const nm=v("mname"),em=v("memail"),pw=v("mpass"),rl=v("mrole"),dp=v("mdept");
+  if(!nm||!em||!pw){toast("Semua field wajib!","err");return;}
+  try{
+    const c=await auth.createUserWithEmailAndPassword(em,pw);
+    await c.user.updateProfile({displayName:nm});
+    const a=nm.split(" ").map(w=>w[0]).join("").slice(0,2).toUpperCase();
+    await db.collection("users").doc(c.user.uid).set({uid:c.user.uid,name:nm,email:em,role:rl,dept:dp,avatar:a,status:"offline",emojiAv:"",createdAt:firebase.firestore.FieldValue.serverTimestamp()});
+    closeAddMem();toast("Anggota ditambahkan!");
+  }catch(e){toast(e.code==="auth/email-already-in-use"?"Email sudah ada.":e.message,"err");}
+}
+
+/* ══ IMAGE UPLOAD (Cloudinary free tier) ══════════════════════════════
+   Pakai ImgBB API gratis — tidak perlu akun berbayar
+   Gambar tersimpan di ImgBB, URL disimpan di Firestore
+════════════════════════════════════════════════════════════════════ */
+async function handleImgPick(input) {
+  const file = input.files[0];
+  if (!file) return;
+  if (file.size > 5 * 1024 * 1024) { toast("Ukuran foto max 5MB!", "err"); return; }
+
+  const prog = $("upprog"), bar = $("upbar");
+  prog.style.display = "block"; bar.style.width = "10%";
+
+  try {
+    // Compress image dulu sebelum upload
+    const compressed = await compressImage(file, 800, 0.75);
+    bar.style.width = "30%";
+
+    // Upload ke Firebase Storage
+    const filename = "photos/" + me.uid + "_" + Date.now() + ".jpg";
+    const ref = storage.ref(filename);
+
+    const uploadTask = ref.putString(compressed.split(",")[1], "base64", {contentType:"image/jpeg"});
+
+    uploadTask.on("state_changed",
+      snapshot => {
+        const pct = 30 + Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 60);
+        bar.style.width = pct + "%";
+      },
+      error => {
+        console.error("Upload error:", error);
+        if (compressed.length < 500000) {
+          sendImgMsg(compressed);
+          toast("Foto terkirim!");
+        } else {
+          toast("Gagal upload. Coba foto yang lebih kecil.", "err");
+        }
+        prog.style.display = "none";
+        input.value = "";
+      },
+      async () => {
+        bar.style.width = "100%";
+        const imgURL = await uploadTask.snapshot.ref.getDownloadURL();
+        await sendImgMsg(imgURL);
+        toast("Foto berhasil dikirim! 📷");
+        setTimeout(() => { prog.style.display = "none"; bar.style.width = "0%"; }, 800);
+        input.value = "";
+      }
+    );
+  } catch(e) {
+    console.error(e);
+    toast("Error kirim foto: " + e.message, "err");
+    prog.style.display = "none";
+    input.value = "";
+  }
+
+  input.value = "";
+}
+
+// Kompres gambar sebelum upload
+function compressImage(file, maxWidth, quality) {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        let w = img.width, h = img.height;
+        if (w > maxWidth) { h = Math.round(h * maxWidth / w); w = maxWidth; }
+        canvas.width = w; canvas.height = h;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, w, h);
+        resolve(canvas.toDataURL("image/jpeg", quality));
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function fileToBase64(file) {
+  return new Promise((res, rej) => {
+    const reader = new FileReader();
+    reader.onload = () => res(reader.result);
+    reader.onerror = rej;
+    reader.readAsDataURL(file);
+  });
+}
+
+async function sendImgMsg(imgURL) {
+  const data = {
+    uid: me.uid, senderName: myP.name,
+    avatar: myP.avatar, emojiAv: myP.emojiAv || "",
+    text: "📷 Foto", imgURL,
+    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+  };
+  if (replyTo) { data.replyTo = replyTo; clearReply(); }
+  if (activeDM) {
+    const dmId = [me.uid, activeDM].sort().join("_");
+    await db.collection("dms").doc(dmId).collection("messages").add(data);
+  } else if (activeCh) {
+    await db.collection("channels").doc(activeCh).collection("messages").add(data);
+  }
+}
+
+function viewImg(url) {
+  $("imgmodal-img").src = url;
+  $("imgmodal").style.display = "flex";
+}
+
+/* ══ EDIT & DELETE MESSAGE ════════════════════════════════════════════ */
+let editMsgId = null;
+let editMsgCol = null;
+
+function getMsgRef(id) {
+  if (activeDM) {
+    const dmId = [me.uid, activeDM].sort().join("_");
+    return db.collection("dms").doc(dmId).collection("messages").doc(id);
+  }
+  return db.collection("channels").doc(activeCh).collection("messages").doc(id);
+}
+
+function startEdit(id, currentText) {
+  editMsgId = id;
+  $("edittxt").value = currentText.replace(/&#39;/g, "'");
+  $("editmod").style.display = "flex";
+  $("edittxt").focus();
+}
+
+function closeEdit() {
+  editMsgId = null;
+  $("editmod").style.display = "none";
+}
+
+async function saveEdit() {
+  const newText = $("edittxt").value.trim();
+  if (!newText) { toast("Pesan tidak boleh kosong!", "err"); return; }
+  if (!editMsgId) return;
+  await getMsgRef(editMsgId).update({
+    text: newText,
+    edited: true,
+    editedAt: firebase.firestore.FieldValue.serverTimestamp(),
+  });
+  closeEdit();
+  toast("Pesan berhasil diedit!");
+}
+
+async function deleteMsg(id) {
+  if (!confirm("Hapus pesan ini?")) return;
+  await getMsgRef(id).delete();
+  toast("Pesan dihapus.", "err");
+}
+
+/* ══ EMOJI REACTIONS ══════════════════════════════════════════════════ */
+let currentReactMsg = null;
+
+function showEmojiPicker(event, msgId) {
+  event.stopPropagation();
+  currentReactMsg = msgId;
+  const picker = $("emojipicker");
+  const rect = event.target.getBoundingClientRect();
+  picker.style.top = (rect.top - 120 + window.scrollY) + "px";
+  picker.style.left = Math.min(rect.left, window.innerWidth - 210) + "px";
+  picker.style.position = "fixed";
+  picker.classList.toggle("show");
+}
+
+document.addEventListener("click", e => {
+  const picker = $("emojipicker");
+  if (picker && !picker.contains(e.target)) picker.classList.remove("show");
+});
+
+async function addReaction(msgId, emoji) {
+  if (!msgId) return;
+  $("emojipicker").classList.remove("show");
+
+  const ref = getMsgRef(msgId);
+  const snap = await ref.get();
+  if (!snap.exists) return;
+
+  const reactions = snap.data().reactions || {};
+  const users = reactions[emoji] || [];
+
+  if (users.includes(me.uid)) {
+    // Toggle off
+    reactions[emoji] = users.filter(u => u !== me.uid);
+    if (reactions[emoji].length === 0) delete reactions[emoji];
+  } else {
+    reactions[emoji] = [...users, me.uid];
+  }
+
+  await ref.update({ reactions });
+}
+
+/* ══ VOICE NOTE ════════════════════════════════════════════════════════ */
+let mediaRecorder = null, audioChunks = [], recInterval = null, recSeconds = 0;
+
+async function toggleRecord() {
+  if (mediaRecorder && mediaRecorder.state === "recording") {
+    // Stop & send
+    mediaRecorder.stop();
+  } else {
+    // Start recording
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      mediaRecorder = new MediaRecorder(stream);
+      audioChunks = [];
+      recSeconds = 0;
+
+      mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+      mediaRecorder.onstop = async () => {
+        clearInterval(recInterval);
+        $("recindicator").classList.remove("show");
+        $("recbtn").classList.remove("recording");
+        $("recbtn").textContent = "🎤";
+
+        const blob = new Blob(audioChunks, { type: "audio/webm" });
+        const dur = formatDur(recSeconds);
+
+        // Upload to ImgBB as base64 (audio)
+        toast("Mengirim voice note...");
+        const b64 = await fileToBase64(blob);
+        const fd = new FormData();
+        fd.append("image", b64.split(",")[1]);
+
+        try {
+          const res = await fetch("https://api.imgbb.com/1/upload?key=c5b5d9b81b3f35a21efb8a7e8df12094", {
+            method: "POST", body: fd
+          });
+          const data = await res.json();
+          if (data.success) {
+            await sendVoiceMsg(data.data.url, dur);
+            toast("Voice note terkirim!");
+          } else {
+            // Fallback: store as data URL in Firestore (for short recordings)
+            if (blob.size < 900000) {
+              const dataUrl = await fileToBase64(blob);
+              await sendVoiceMsg(dataUrl, dur);
+              toast("Voice note terkirim!");
+            } else {
+              toast("Voice note terlalu panjang, max 30 detik.", "err");
+            }
+          }
+        } catch(e) {
+          toast("Gagal kirim voice note.", "err");
+        }
+
+        // Stop tracks
+        stream.getTracks().forEach(t => t.stop());
+      };
+
+      mediaRecorder.start();
+      $("recbtn").classList.add("recording");
+      $("recbtn").textContent = "⏹️";
+      $("recindicator").classList.add("show");
+
+      recInterval = setInterval(() => {
+        recSeconds++;
+        $("rectimer").textContent = formatDur(recSeconds);
+        if (recSeconds >= 60) mediaRecorder.stop(); // max 1 menit
+      }, 1000);
+
+    } catch(e) {
+      toast("Izin mikrofon ditolak.", "err");
+    }
+  }
+}
+
+function formatDur(s) {
+  return Math.floor(s/60) + ":" + String(s%60).padStart(2,"0");
+}
+
+async function sendVoiceMsg(voiceURL, voiceDur) {
+  const data = {
+    uid: me.uid, senderName: myP.name,
+    avatar: myP.avatar, emojiAv: myP.emojiAv || "",
+    text: "🎤 Voice note", voiceURL, voiceDur,
+    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+  };
+  if (replyTo) { data.replyTo = replyTo; clearReply(); }
+  if (activeDM) {
+    const dmId = [me.uid, activeDM].sort().join("_");
+    await db.collection("dms").doc(dmId).collection("messages").add(data);
+  } else if (activeCh) {
+    await db.collection("channels").doc(activeCh).collection("messages").add(data);
+  }
+}
+
+const audioPlayers = {};
+function playVoice(url, btn) {
+  // Stop all other players
+  Object.values(audioPlayers).forEach(a => { a.pause(); a.currentTime = 0; });
+  document.querySelectorAll(".voice-play").forEach(b => b.textContent = "▶️");
+  document.querySelectorAll(".voice-wave").forEach(w => w.classList.remove("playing"));
+
+  const audio = new Audio(url);
+  audioPlayers[url] = audio;
+
+  btn.textContent = "⏸️";
+  const wave = btn.nextElementSibling;
+  if (wave) wave.classList.add("playing");
+
+  audio.play().catch(() => toast("Tidak bisa memutar audio.", "err"));
+  audio.onended = () => {
+    btn.textContent = "▶️";
+    if (wave) wave.classList.remove("playing");
+  };
+  audio.onerror = () => {
+    btn.textContent = "▶️";
+    toast("Format audio tidak didukung.", "err");
+  };
+}
+
+/* ══ PIN MESSAGE ═══════════════════════════════════════════════════════ */
+let pinnedMsgId = null;
+
+async function pinMsg(id, text) {
+  pinnedMsgId = id;
+  const pinKey = activeDM ? "pin_dm_" + [me.uid,activeDM].sort().join("_") : "pin_ch_" + activeCh;
+  await db.collection("pins").doc(pinKey).set({
+    msgId: id, text, pinnedBy: me.uid, channel: activeCh || activeDM,
+    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+  });
+  showPinBar(text);
+  toast("Pesan di-pin!");
+}
+
+function showPinBar(text) {
+  $("pinbar").classList.add("show");
+  $("pintxt").textContent = text;
+}
+
+async function unpin() {
+  const pinKey = activeDM ? "pin_dm_" + [me.uid,activeDM].sort().join("_") : "pin_ch_" + activeCh;
+  await db.collection("pins").doc(pinKey).delete();
+  $("pinbar").classList.remove("show");
+  pinnedMsgId = null;
+  toast("Pin dihapus.");
+}
+
+function scrollToPin() {
+  if (!pinnedMsgId) return;
+  const el = document.getElementById("msg-" + pinnedMsgId);
+  if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+}
+
+async function loadPin() {
+  const pinKey = activeDM ? "pin_dm_" + [me.uid,activeDM].sort().join("_") : "pin_ch_" + activeCh;
+  const snap = await db.collection("pins").doc(pinKey).get();
+  if (snap.exists) {
+    showPinBar(snap.data().text);
+    pinnedMsgId = snap.data().msgId;
+  } else {
+    $("pinbar").classList.remove("show");
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   VOICE CHANNEL — WebRTC via PeerJS + Firebase signaling
+══════════════════════════════════════════════════════════════════════ */
+let peer = null;
+let localStream = null;
+let activeVC = null;          // nama VC yang sedang diikuti
+let vcPeers = {};             // { uid: { call, stream, muted } }
+let isMuted = false;
+let isDeafened = false;
+let unsubVC = null;
+let vcTimerInterval = null;
+let vcSeconds = 0;
+
+// ── Init PeerJS dengan ID unik berdasarkan UID Firebase ───────────────
+function initPeer() {
+  return new Promise((resolve, reject) => {
+    if (peer && !peer.destroyed) { resolve(peer); return; }
+    // PeerID = uid tapi hanya huruf/angka (PeerJS tidak terima karakter khusus)
+    const peerId = "tc_" + me.uid.replace(/[^a-zA-Z0-9]/g, "");
+    peer = new Peer(peerId, {
+      host: "0.peerjs.com", port: 443, path: "/",
+      secure: true, debug: 0,
+      config: { iceServers: [
+        { urls: "stun:stun.l.google.com:19302" },
+        { urls: "stun:stun1.l.google.com:19302" },
+      ]}
+    });
+    peer.on("open", id => { console.log("PeerJS ready:", id); resolve(peer); });
+    peer.on("error", e => { console.error("PeerJS error:", e); reject(e); });
+    // Handle incoming calls
+    peer.on("call", async call => {
+      if (!localStream) {
+        try { localStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false }); }
+        catch(e) { return; }
+      }
+      call.answer(localStream);
+      call.on("stream", remoteStream => {
+        const uid = call.metadata?.uid;
+        if (uid) receiveRemoteStream(uid, remoteStream, call);
+      });
+    });
+  });
+}
+
+// ── Join Voice Channel ────────────────────────────────────────────────
+async function joinVC(vcName) {
+  if (activeVC === vcName) { leaveVC(); return; }
+  if (activeVC) await leaveVC();
+
+  try {
+    // Get mic access
+    localStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+  } catch(e) {
+    toast("Izin mikrofon ditolak! Aktifkan di pengaturan browser.", "err");
+    return;
+  }
+
+  try { await initPeer(); } catch(e) {
+    toast("Gagal terhubung ke server. Coba lagi.", "err");
+    return;
+  }
+
+  activeVC = vcName;
+  const peerId = "tc_" + me.uid.replace(/[^a-zA-Z0-9]/g, "");
+
+  // Register di Firebase
+  await db.collection("voicechannels").doc(vcName)
+    .collection("members").doc(me.uid).set({
+      uid: me.uid, name: myP.name, avatar: myP.avatar,
+      emojiAv: myP.emojiAv || "", peerId,
+      muted: false, joinedAt: firebase.firestore.FieldValue.serverTimestamp(),
+    });
+
+  // Listen to other members
+  unsubVC = db.collection("voicechannels").doc(vcName)
+    .collection("members").onSnapshot(async snap => {
+      const members = snap.docs.map(d => d.data()).filter(m => m.uid !== me.uid);
+      renderVCBar(vcName, members);
+      renderVCList();
+
+      // Call members we haven't called yet
+      for (const member of members) {
+        if (!vcPeers[member.uid] && member.peerId) {
+          callMember(member);
+        }
+      }
+
+      // Remove peers who left
+      const activeUIDs = new Set(members.map(m => m.uid));
+      for (const uid of Object.keys(vcPeers)) {
+        if (!activeUIDs.has(uid)) {
+          if (vcPeers[uid].call) vcPeers[uid].call.close();
+          removeAudio(uid);
+          delete vcPeers[uid];
+        }
+      }
+    });
+
+  // Show call bar
+  $("vcall-bar").classList.add("show");
+  $("vcall-name").textContent = "🔊 " + vcName.charAt(0).toUpperCase() + vcName.slice(1);
+
+  // Highlight active VC
+  document.querySelectorAll(".vc-item").forEach(el => el.classList.remove("active-vc"));
+  const vcEl = $("vci-" + vcName);
+  if (vcEl) vcEl.classList.add("active-vc");
+
+  // Timer
+  vcSeconds = 0;
+  vcTimerInterval = setInterval(() => {
+    vcSeconds++;
+    $("vcall-info").textContent = "Terhubung · " + formatDur(vcSeconds);
+  }, 1000);
+
+  renderVCMembers([{ uid: me.uid, name: myP.name, avatar: myP.avatar, emojiAv: myP.emojiAv || "", muted: false }]);
+  toast("Bergabung ke voice channel " + vcName + "!");
+}
+
+// ── Call another member ───────────────────────────────────────────────
+function callMember(member) {
+  if (!peer || !localStream || !member.peerId) return;
+  const call = peer.call(member.peerId, localStream, { metadata: { uid: me.uid } });
+  if (!call) return;
+  vcPeers[member.uid] = { call, stream: null, muted: false };
+  call.on("stream", remoteStream => receiveRemoteStream(member.uid, remoteStream, call));
+  call.on("close", () => { delete vcPeers[member.uid]; removeAudio(member.uid); });
+}
+
+// ── Handle incoming audio stream ──────────────────────────────────────
+function receiveRemoteStream(uid, stream, call) {
+  vcPeers[uid] = { ...(vcPeers[uid] || {}), call, stream };
+  // Play audio
+  let audio = document.getElementById("audio_" + uid);
+  if (!audio) {
+    audio = document.createElement("audio");
+    audio.id = "audio_" + uid;
+    audio.autoplay = true;
+    document.body.appendChild(audio);
+  }
+  audio.srcObject = stream;
+  if (isDeafened) audio.volume = 0;
+}
+
+function removeAudio(uid) {
+  const audio = document.getElementById("audio_" + uid);
+  if (audio) audio.remove();
+}
+
+// ── Leave VC ─────────────────────────────────────────────────────────
+async function leaveVC() {
+  if (!activeVC) return;
+
+  // Remove from Firebase
+  await db.collection("voicechannels").doc(activeVC)
+    .collection("members").doc(me.uid).delete().catch(() => {});
+
+  // Close all peer connections
+  Object.values(vcPeers).forEach(p => { if (p.call) p.call.close(); });
+  vcPeers = {};
+
+  // Stop local stream
+  if (localStream) { localStream.getTracks().forEach(t => t.stop()); localStream = null; }
+
+  // Unsubscribe
+  if (unsubVC) { unsubVC(); unsubVC = null; }
+  clearInterval(vcTimerInterval);
+
+  // Remove all audio elements
+  document.querySelectorAll("audio[id^='audio_']").forEach(a => a.remove());
+
+  // Reset UI
+  $("vcall-bar").classList.remove("show");
+  document.querySelectorAll(".vc-item").forEach(el => el.classList.remove("active-vc"));
+  isMuted = false; isDeafened = false;
+  $("btn-mute").classList.remove("active");
+  $("btn-deafen").classList.remove("active");
+  $("btn-mute").textContent = "🎙️";
+  $("btn-deafen").textContent = "🔊";
+
+  const prevVC = activeVC;
+  activeVC = null;
+  renderVCList();
+  toast("Keluar dari voice channel " + prevVC + ".");
+}
+
+// ── Mute/Unmute ───────────────────────────────────────────────────────
+function toggleMute() {
+  if (!localStream) return;
+  isMuted = !isMuted;
+  localStream.getAudioTracks().forEach(t => t.enabled = !isMuted);
+  $("btn-mute").classList.toggle("active", isMuted);
+  $("btn-mute").textContent = isMuted ? "🔇" : "🎙️";
+
+  // Update Firebase
+  if (activeVC) {
+    db.collection("voicechannels").doc(activeVC)
+      .collection("members").doc(me.uid).update({ muted: isMuted }).catch(() => {});
+  }
+  toast(isMuted ? "Mikrofon dimatikan." : "Mikrofon dinyalakan.");
+}
+
+// ── Deafen ────────────────────────────────────────────────────────────
+function toggleDeafen() {
+  isDeafened = !isDeafened;
+  document.querySelectorAll("audio[id^='audio_']").forEach(a => a.volume = isDeafened ? 0 : 1);
+  $("btn-deafen").classList.toggle("active", isDeafened);
+  $("btn-deafen").textContent = isDeafened ? "🔕" : "🔊";
+  toast(isDeafened ? "Speaker dimatikan." : "Speaker dinyalakan.");
+}
+
+// ── Render VC List in Sidebar ─────────────────────────────────────────
+let unsubVCList = null;
+function listenVCList() {
+  const VCS = ["umum", "meeting"];
+  VCS.forEach(vcName => {
+    db.collection("voicechannels").doc(vcName)
+      .collection("members").onSnapshot(snap => {
+        const count = snap.size;
+        const el = $("vcc-" + vcName);
+        if (el) el.textContent = count > 0 ? count + " 👤" : "";
+
+        // Show members below VC button
+        let membersEl = $("vcm-" + vcName);
+        if (!membersEl) {
+          membersEl = document.createElement("div");
+          membersEl.id = "vcm-" + vcName;
+          membersEl.className = "vc-members";
+          const btn = $("vci-" + vcName);
+          if (btn && btn.nextSibling) btn.parentNode.insertBefore(membersEl, btn.nextSibling);
+        }
+        membersEl.innerHTML = snap.docs.map(d => {
+          const m = d.data();
+          return `<div class="vc-member${m.uid === me?.uid ? " speaking" : ""}">
+            ${m.muted ? "🔇" : "🎙️"} <span>${esc(m.name.split(" ")[0])}</span>
+          </div>`;
+        }).join("");
+
+        // Show join banner if others in channel and we're not in it
+        if (vcName !== activeVC && count > 0) {
+          const names = snap.docs.map(d => d.data().name.split(" ")[0]).join(", ");
+          $("vc-banner").classList.add("show");
+          $("vc-banner-name").textContent = "🔊 " + vcName;
+          $("vc-banner-members").textContent = names + " sedang di sini";
+          $("vc-banner").dataset.vcname = vcName;
+        } else if (vcName === $("vc-banner")?.dataset?.vcname) {
+          $("vc-banner").classList.remove("show");
+        }
+      });
+  });
+}
+
+function joinCurrentVC() {
+  const vcName = $("vc-banner").dataset.vcname;
+  if (vcName) joinVC(vcName);
+}
+
+function renderVCList() {
+  // Just update active state
+  document.querySelectorAll(".vc-item").forEach(el => el.classList.remove("active-vc"));
+  if (activeVC) {
+    const el = $("vci-" + activeVC);
+    if (el) el.classList.add("active-vc");
+  }
+}
+
+// ── Render members in call bar ────────────────────────────────────────
+function renderVCBar(vcName, members) {
+  const allMembers = [
+    { uid: me.uid, name: myP.name, avatar: myP.avatar, emojiAv: myP.emojiAv || "", muted: isMuted },
+    ...members
+  ];
+  renderVCMembers(allMembers);
+}
+
+function renderVCMembers(members) {
+  const el = $("vcall-members");
+  if (!el) return;
+  el.innerHTML = members.map(m => `
+    <div class="vc-peer">
+      <div class="vc-peer-av ${m.uid === me?.uid && !isMuted ? "speaking" : ""}">${av(m, 40)}</div>
+      <span class="vc-peer-name">${esc(m.name.split(" ")[0])}</span>
+      <span class="vc-peer-mic">${m.muted ? "🔇" : ""}</span>
+    </div>`).join("");
+}
+
+// ── Create new VC ─────────────────────────────────────────────────────
+async function createVC() {
+  const name = prompt("Nama voice channel baru (huruf kecil, tanpa spasi):");
+  if (!name) return;
+  const clean = name.toLowerCase().replace(/[^a-z0-9-]/g, "").slice(0, 20);
+  if (!clean) { toast("Nama tidak valid!", "err"); return; }
+
+  // Add button to sidebar
+  const vcList = $("vc-list");
+  if (!vcList || $("vci-" + clean)) { toast("Channel sudah ada!", "err"); return; }
+
+  const btn = document.createElement("button");
+  btn.className = "vc-item";
+  btn.id = "vci-" + clean;
+  btn.onclick = () => joinVC(clean);
+  btn.innerHTML = `<span class="vc-item-icon">🔊</span><span class="vc-item-name">${clean}</span><span id="vcc-${clean}" style="font-size:10px;color:var(--sub);font-family:'DM Mono',monospace"></span>`;
+  vcList.appendChild(btn);
+
+  // Save to Firebase
+  await db.collection("voicechannels").doc(clean).set({
+    name: clean, createdBy: me.uid,
+    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+  });
+  toast("Voice channel #" + clean + " dibuat!");
+  joinVC(clean);
+}
+
+// Handle page close — auto leave VC
+window.addEventListener("beforeunload", () => {
+  if (activeVC) {
+    db.collection("voicechannels").doc(activeVC)
+      .collection("members").doc(me.uid).delete();
+  }
+});
+</script>
+
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    // SW hanya jalan kalau diakses via HTTPS (GitHub Pages)
+    // Tidak jalan dari file lokal — itu normal
+    if (location.protocol === 'https:') {
+      const swContent = 'self.addEventListener("install",e=>self.skipWaiting());self.addEventListener("activate",e=>self.clients.claim());';
+      const blob = new Blob([swContent], {type:'text/javascript'});
+      navigator.serviceWorker.register(URL.createObjectURL(blob))
+        .then(()=>console.log('SW ok'))
+        .catch(()=>{}); // silent fail - app tetap jalan tanpa SW
+    }
+  });
+}
+
+// PWA Install prompt
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  showInstallBanner();
+});
+
+function showInstallBanner() {
+  const banner = document.getElementById('install-banner');
+  if (banner) banner.style.display = 'flex';
+}
+
+function installPWA() {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  deferredPrompt.userChoice.then(result => {
+    if (result.outcome === 'accepted') {
+      toast('TeamChat berhasil diinstall! ✅');
+    }
+    deferredPrompt = null;
+    document.getElementById('install-banner').style.display = 'none';
+  });
+}
+
+window.addEventListener('appinstalled', () => {
+  toast('TeamChat sudah terinstall di HP Anda! 🎉');
+  deferredPrompt = null;
+});
+</script>
+
+</body>
+</html>
