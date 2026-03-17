@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
+<title>TeamChat</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700;800;900&family=DM+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden;font-family:"DM Sans",sans-serif}
+button{cursor:pointer;font-family:"DM Sans",sans-serif}
+input,select,textarea{font-family:"DM Sans",sans-serif}
+::-webkit-scrollbar{width:3px;height:3px}
+::-webkit-scrollbar-thumb{background:#252a40;border-radius:4px}
+select option{background:#181c28}
+:root{
+  --bg:#0b0d14;--surf:#111420;--card:#181c28;--bdr:#252a40;
+  --acc:#00d68f;--acc-lo:#00d68f15;--acc-md:#00d68f50;
+  --blue:#4a8eff;--blue-lo:#4a8eff15;
+  --red:#ff4d4d;--red-lo:#ff4d4d15;
+  --org:#ff9f43;--txt:#e2e6f3;--sub:#7a84a0;--dim:#383e5a;
+}
+#app{height:100vh;flex-direction:column;background:var(--bg);color:var(--txt);display:none}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes toastIn{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+.auth-page{display:none;align-items:center;justify-content:center;min-height:100vh;padding:20px;background:var(--bg);position:relative;overflow:hidden}
+.abg{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 80% 60% at 20% 10%,#00d68f08,transparent 60%),radial-gradient(ellipse 60% 80% at 80% 90%,#4a8eff08,transparent 60%)}
+.agr{position:absolute;inset:0;pointer-events:none;opacity:.2;background-image:linear-gradient(var(--bdr) 1px,transparent 1px),linear-gradient(90deg,var(--bdr) 1px,transparent 1px);background-size:40px 40px}
+.abox{position:relative;z-index:1;width:100%;max-width:420px;background:var(--surf);border:1px solid var(--bdr);border-radius:20px;padding:30px 26px;box-shadow:0 32px 80px #000a;animation:fadeUp .4s ease}
+.alogo{display:flex;align-items:center;gap:10px;justify-content:center;margin-bottom:20px}
+.alogo-ic{width:40px;height:40px;border-radius:10px;background:var(--acc);color:var(--bg);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;font-family:"DM Mono",monospace}
+.alogo-tx{font-size:20px;font-weight:900;color:var(--txt)}
+.atitle{text-align:center;font-size:16px;font-weight:800;color:var(--txt);margin-bottom:4px}
+.asub{text-align:center;font-size:12px;color:var(--sub);margin-bottom:20px}
+.fl{display:block;font-size:10px;font-weight:700;color:var(--dim);letter-spacing:1.3px;font-family:"DM Mono",monospace;margin-bottom:4px}
+.fi{width:100%;background:var(--card);border:1px solid var(--bdr);border-radius:10px;padding:10px 12px;color:var(--txt);font-size:13px;outline:none;margin-bottom:11px;transition:border-color .2s}
+.fi:focus{border-color:var(--acc-md)} .fi::placeholder{color:var(--dim)}
+.fs{width:100%;background:var(--card);border:1px solid var(--bdr);border-radius:10px;padding:10px 12px;color:var(--txt);font-size:13px;outline:none;margin-bottom:11px;appearance:none}
+.btnp{width:100%;background:var(--acc);border:none;border-radius:10px;padding:11px;color:var(--bg);font-size:13px;font-weight:900;font-family:"DM Mono",monospace}
+.adiv{display:flex;align-items:center;gap:10px;margin:12px 0;color:var(--dim);font-size:11px}
+.adiv::before,.adiv::after{content:"";flex:1;height:1px;background:var(--bdr)}
+.asw{text-align:center;font-size:12px;color:var(--sub);margin-top:10px}
+.asw a{color:var(--acc);font-weight:700;cursor:pointer}
+.aerr{background:var(--red-lo);border:1px solid #ff4d4d30;border-radius:8px;padding:8px 12px;font-size:12px;color:var(--red);margin-bottom:10px;display:none}
+#topbar{height:50px;flex-shrink:0;padding:0 12px;display:flex;align-items:center;gap:8px;background:var(--surf);border-bottom:1px solid var(--bdr)}
+.brand{background:var(--acc);color:var(--bg);font-weight:900;font-size:12px;padding:4px 8px;border-radius:7px;font-family:"DM Mono",monospace;flex-shrink:0}
+.navbtn{background:transparent;border:1px solid transparent;border-radius:8px;padding:5px 10px;font-size:12px;font-weight:700;color:var(--sub);display:flex;align-items:center;gap:4px;transition:all .15s;flex-shrink:0}
+.navbtn.active{background:var(--acc-lo);border-color:var(--acc-md);color:var(--acc)}
+.chip{margin-left:auto;display:flex;align-items:center;gap:7px;cursor:pointer}
+.cnm{font-size:11px;font-weight:700;color:var(--txt)} .crl{font-size:9px;color:var(--acc);font-family:"DM Mono",monospace}
+.btnout{background:var(--red-lo);border:1px solid #ff4d4d30;border-radius:7px;padding:5px 8px;color:var(--red);font-size:11px;font-weight:700;font-family:"DM Mono",monospace;margin-left:4px;flex-shrink:0}
+#srings{display:flex;gap:10px;padding:10px 12px;overflow-x:auto;border-bottom:1px solid var(--bdr);flex-shrink:0;min-height:76px;align-items:center}
+.sring{background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:3px;flex-shrink:0}
+.srav{border:2.5px solid var(--dim);border-radius:50%;padding:2px} .sring.has .srav{border-color:var(--acc)}
+.srlb{font-size:10px;color:var(--sub);max-width:48px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:center}
+.sovl{position:absolute;inset:0;z-index:30;display:flex;pointer-events:none;opacity:0;transition:opacity .2s}
+.sovl.open{pointer-events:auto;opacity:1}
+.ovbg{flex:1;background:#0009;cursor:pointer}
+.sidebar{width:225px;height:100%;flex-shrink:0;background:var(--surf);border-right:1px solid var(--bdr);display:flex;flex-direction:column;transition:transform .25s}
+.sovl .sidebar{position:absolute;left:0;top:0;bottom:0;z-index:31}
+.sovl:not(.open) .sidebar{transform:translateX(-100%)} .sovl.open .sidebar{transform:translateX(0)}
+.stabs{display:flex;border-bottom:1px solid var(--bdr);flex-shrink:0}
+.stab{flex:1;background:none;border:none;padding:9px 4px;font-size:11px;font-weight:600;color:var(--sub);border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s}
+.stab.active{color:var(--acc);border-bottom-color:var(--acc);font-weight:800}
+.sbody{flex:1;overflow-y:auto;padding:4px 8px 12px}
+.slbl{font-size:10px;font-weight:700;color:var(--dim);letter-spacing:1.4px;padding:8px 10px 5px;font-family:"DM Mono",monospace}
+.sitm{width:100%;display:flex;align-items:center;justify-content:space-between;gap:6px;padding:7px 10px;border-radius:8px;border:none;font-size:13px;background:transparent;color:var(--sub);font-weight:500;margin-bottom:2px;transition:all .12s;text-align:left}
+.sitm:hover{background:var(--card);color:var(--txt)} .sitm.active{background:var(--acc-lo);color:var(--acc);font-weight:700}
+.sil{display:flex;align-items:center;gap:7px;min-width:0;overflow:hidden}
+.sin{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#chatview{flex:1;display:flex;overflow:hidden;min-height:0}
+.cwrap{display:flex;height:100%;position:relative;overflow:hidden;width:100%;min-height:0}
+.cmain{flex:1;display:flex;flex-direction:column;min-width:0;overflow:hidden;min-height:0}
+.chdr{height:50px;flex-shrink:0;padding:0 12px;display:flex;align-items:center;gap:9px;background:var(--surf);border-bottom:1px solid var(--bdr)}
+.mbtn{background:var(--card);border:1px solid var(--bdr);border-radius:8px;padding:5px 9px;font-size:14px;color:var(--sub);flex-shrink:0}
+.msgs{flex:1;overflow-y:auto;padding:10px 12px 80px;display:flex;flex-direction:column;gap:2px}
+.mrow{display:flex;gap:8px;align-items:flex-end} .mrow.own{flex-direction:row-reverse} .msp{margin-top:10px}
+.mavc{width:30px;flex-shrink:0;display:flex;align-items:flex-end}
+.mbody{max-width:75%;display:flex;flex-direction:column;align-items:flex-start}
+.mrow.own .mbody{align-items:flex-end}
+.mmeta{display:flex;align-items:baseline;gap:6px;margin-bottom:3px}
+.mrow.own .mmeta{flex-direction:row-reverse}
+.msndr{font-size:11px;font-weight:700;color:var(--blue)} .mrow.own .msndr{color:var(--acc)}
+.mtime{font-size:10px;color:var(--dim)}
+.mbbl{padding:8px 12px;font-size:13px;line-height:1.55;border:1px solid var(--bdr);word-break:break-word;background:var(--card);color:var(--txt);border-radius:4px 14px 14px 14px;cursor:pointer}
+.mrow.own .mbbl{background:var(--acc);color:var(--bg);border-color:transparent;border-radius:14px 4px 14px 14px;font-weight:600}
+.rprev{background:var(--bg);border-left:3px solid var(--acc);border-radius:4px 8px 8px 4px;padding:5px 10px;margin-bottom:4px;max-width:100%}
+.rprev.own{border-left-color:#ffffff50;background:#00000025}
+.rpnm{font-size:10px;font-weight:700;color:var(--acc);display:block} .rprev.own .rpnm{color:#ffffffaa}
+.rptx{font-size:11px;color:var(--sub);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block;max-width:180px}
+.sysmsg{text-align:center;padding:5px 12px;font-size:11px;color:var(--sub);background:var(--card);border:1px solid var(--bdr);border-radius:20px;margin:6px auto;max-width:260px;font-family:"DM Mono",monospace}
+#rbar{display:none;align-items:center;gap:8px;padding:6px 12px;background:var(--card);border-top:1px solid var(--bdr);flex-shrink:0}
+.rbi{flex:1;min-width:0}
+.rbn{font-size:11px;font-weight:700;color:var(--acc)}
+.rbt{font-size:12px;color:var(--sub);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block}
+.cinput{padding:8px 12px 12px;background:var(--surf);border-top:1px solid var(--bdr);flex-shrink:0;position:fixed;bottom:0;left:0;right:0;z-index:10}
+.ibox{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--bdr);border-radius:12px;padding:7px 10px}
+.ibox input{flex:1;background:none;border:none;outline:none;color:var(--txt);font-size:13px;min-width:0}
+.ibox input::placeholder{color:var(--dim)}
+.icobtn{background:none;border:none;font-size:15px;color:var(--sub);padding:2px;flex-shrink:0}
+.sndbtn{background:var(--dim);border:none;border-radius:8px;padding:7px 12px;font-size:11px;font-weight:900;font-family:"DM Mono",monospace;color:var(--surf);flex-shrink:0;transition:all .15s;opacity:.4}
+.sndbtn.ready{background:var(--acc);color:var(--bg);opacity:1}
+.baddst{width:100%;background:var(--acc-lo);border:1.5px dashed var(--acc-md);border-radius:10px;padding:10px;color:var(--acc);font-size:13px;font-weight:800;font-family:"DM Mono",monospace}
+.stcard{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--bdr);border-radius:11px;padding:12px 14px;cursor:pointer;margin-bottom:8px}
+#adminview{flex:1;overflow-y:auto;display:none;padding-bottom:20px}
+.ainner{padding:16px 14px;max-width:700px;margin:0 auto}
+.sgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.scard{background:var(--card);border:1px solid var(--bdr);border-radius:12px;padding:13px 14px}
+.ucard{background:var(--card);border:1px solid var(--bdr);border-radius:11px;padding:12px 13px;display:flex;align-items:center;gap:11px;margin-bottom:8px}
+.movl{position:fixed;inset:0;background:#0009;z-index:50;display:none;align-items:center;justify-content:center;padding:16px}
+.mbox{background:var(--surf);border:1px solid var(--bdr);border-radius:16px;padding:22px;width:100%;max-width:340px;box-shadow:0 24px 72px #000c;animation:fadeUp .22s ease}
+.mtitle{font-size:16px;font-weight:900;color:var(--txt);margin-bottom:14px}
+.mbtns{display:flex;gap:10px;margin-top:14px}
+.bcnl{flex:1;background:none;border:1px solid var(--bdr);color:var(--sub);border-radius:9px;padding:9px 0;font-size:12px;font-family:"DM Mono",monospace}
+.bkok{flex:2;background:var(--acc);border:none;color:var(--bg);border-radius:9px;padding:9px 0;font-size:12px;font-weight:900;font-family:"DM Mono",monospace}
+.svbox{background:var(--surf);border:1px solid var(--bdr);border-radius:20px;padding:26px 22px;width:100%;max-width:340px;position:relative;animation:fadeUp .22s ease}
+.svclose{position:absolute;top:14px;right:14px;background:var(--card);border:1px solid var(--bdr);border-radius:50%;width:30px;height:30px;font-size:14px;color:var(--sub)}
+.atabs{display:flex;border-bottom:1px solid var(--bdr);margin-bottom:14px}
+.atab{background:none;border:none;padding:8px 14px;font-size:12px;font-weight:500;color:var(--sub);border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s}
+.atab.active{color:var(--acc);font-weight:800;border-bottom-color:var(--acc)}
+#toast{position:fixed;top:14px;right:14px;z-index:999;padding:10px 16px;border-radius:10px;font-weight:700;font-size:13px;box-shadow:0 8px 32px #0008;animation:toastIn .2s ease;display:none}
+</style>
+</head>
+<body>
+<div id="login-page" class="auth-page" style="display:flex">
+  <div class="abg"></div><div class="agr"></div>
+  <div class="abox">
+    <div class="alogo"><div class="alogo-ic">TC</div><span class="alogo-tx">TeamChat</span></div>
+    <div class="atitle">Selamat Datang 👋</div>
+    <p class="asub">Platform komunikasi tim Anda</p>
+    <div class="aerr" id="lerr"></div>
+    <label class="fl">EMAIL</label>
+    <input class="fi" id="lemail" type="email" placeholder="nama@perusahaan.com"/>
+    <label class="fl">PASSWORD</label>
+    <input class="fi" id="lpass" type="password" placeholder="Password" onkeydown="if(event.key==='Enter')doLogin()"/>
+    <button class="btnp" onclick="doLogin()">Masuk</button>
+    <div class="adiv">atau</div>
+    <p class="asw">Belum punya akun? <a onclick="showReg()">Daftar sekarang</a></p>
+  </div>
+</div>
+<div id="reg-page" class="auth-page">
+  <div class="abg"></div><div class="agr"></div>
+  <div class="abox" style="max-width:440px">
+    <div class="alogo"><div class="alogo-ic">TC</div><span class="alogo-tx">TeamChat</span></div>
+    <div class="atitle">Buat Akun ✨</div>
+    <p class="asub">Bergabung dengan tim Anda</p>
+    <div class="aerr" id="rerr"></div>
+    <label class="fl">NAMA LENGKAP</label><input class="fi" id="rname" type="text" placeholder="Nama lengkap"/>
+    <label class="fl">EMAIL</label><input class="fi" id="remail" type="email" placeholder="nama@perusahaan.com"/>
+    <label class="fl">DEPARTEMEN</label>
+    <select class="fs" id="rdept"><option>Engineering</option><option>Marketing</option><option>Design</option><option>Sales</option><option>HR</option></select>
+    <label class="fl">PASSWORD</label><input class="fi" id="rpass" type="password" placeholder="Min. 6 karakter"/>
+    <label class="fl">KONFIRMASI PASSWORD</label><input class="fi" id="rpass2" type="password" placeholder="Ulangi password"/>
+    <button class="btnp" onclick="doRegister()">Buat Akun</button>
+    <div class="adiv">atau</div>
+    <p class="asw">Sudah punya akun? <a onclick="showLogin()">Masuk di sini</a></p>
+  </div>
+</div>
+<div id="app">
+  <div id="topbar">
+    <div class="brand">TC</div>
+    <span style="font-size:13px;font-weight:800;color:var(--txt);flex-shrink:0">TeamChat</span>
+    <div style="display:flex;gap:4px">
+      <button class="navbtn active" id="nvchat" onclick="switchView('chat')">💬 Chat</button>
+      <button class="navbtn" id="nvadmin" onclick="switchView('admin')">⚙️ Admin</button>
+    </div>
+    <div class="chip" onclick="openProf()">
+      <div id="topav" style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#00d68f30,#4a8eff30);border:1.5px solid var(--bdr);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--acc);font-family:'DM Mono',monospace;position:relative;flex-shrink:0"></div>
+      <div style="display:flex;flex-direction:column;line-height:1.2"><span class="cnm" id="topnm"></span><span class="crl" id="toprl"></span></div>
+    </div>
+    <button class="btnout" onclick="doLogout()">⏏</button>
+  </div>
+  <div id="chatview" style="display:flex;flex:1;overflow:hidden;min-height:0">
+    <div class="cwrap">
+      <div class="sovl" id="sovl" onclick="if(event.target===this||event.target.classList.contains('ovbg'))closeSidebar()">
+        <div class="sidebar">
+          <div id="srings"></div>
+          <div class="stabs">
+            <button class="stab active" id="sttch" onclick="switchTab('ch')">Channel</button>
+            <button class="stab" id="sttdm" onclick="switchTab('dm')">DM</button>
+            <button class="stab" id="sttst" onclick="switchTab('st')">Story</button>
+          </div>
+          <div id="tabch" class="sbody">
+            <div style="padding:6px 2px 4px"><div style="display:flex;align-items:center;background:var(--card);border:1px solid var(--bdr);border-radius:8px;padding:5px 9px;gap:6px"><span style="color:var(--dim);font-size:11px">🔍</span><input id="chsearch" placeholder="Cari channel..." oninput="filterCh(this.value)" style="flex:1;background:none;border:none;outline:none;color:var(--txt);font-size:12px"/></div></div>
+            <div class="slbl">CHANNELS</div><div id="chlist"></div>
+            <div class="slbl" style="margin-top:10px">ONLINE · <span id="onlinecnt">0</span></div><div id="onlinelist"></div>
+          </div>
+          <div id="tabdm" class="sbody" style="display:none"><div class="slbl">PESAN LANGSUNG</div><div id="dmlist"></div></div>
+          <div id="tabst" style="display:none;overflow-y:auto;flex:1;padding:12px"></div>
+        </div>
+        <div class="ovbg"></div>
+      </div>
+      <div class="cmain">
+        <div class="chdr">
+          <button class="mbtn" onclick="openSidebar()">☰</button>
+          <span id="chaticon" style="color:var(--sub);font-size:14px;flex-shrink:0"></span>
+          <div style="flex:1;min-width:0">
+            <div style="font-weight:800;color:var(--txt);font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" id="chattitle"></div>
+            <div style="font-size:10px;color:var(--sub);margin-top:1px" id="chatsub"></div>
+          </div>
+          <button style="background:var(--card);border:1px solid var(--bdr);border-radius:8px;padding:5px 8px;font-size:12px;color:var(--sub);flex-shrink:0">🔔</button>
+        </div>
+        <div class="msgs" id="msgs"></div>
+        <div id="rbar">
+          <div style="color:var(--acc);font-size:14px">↩</div>
+          <div class="rbi"><span class="rbn" id="rbn"></span><span class="rbt" id="rbt"></span></div>
+          <button style="background:none;border:none;font-size:16px;color:var(--sub)" onclick="clearReply()">✕</button>
+        </div>
+        <div class="cinput">
+          <div class="ibox">
+            <button class="icobtn" onclick="openAddStory()" title="Post Story">📸</button>
+            <input id="msginput" placeholder="" oninput="toggleSend()" onkeydown="handleEnter(event)"/>
+            <button class="icobtn">😊</button>
+            <button class="sndbtn" id="sndbtn" onclick="sendMsg()">KIRIM</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="adminview">
+    <div class="ainner">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px;gap:10px;flex-wrap:wrap">
+        <div><div style="font-size:18px;font-weight:900;color:var(--txt)">Panel Admin</div><div style="font-size:12px;color:var(--sub);margin-top:3px">Kelola tim secara real-time</div></div>
+        <div style="display:flex;gap:8px">
+          <button onclick="openAddCh()" style="background:var(--blue-lo);color:var(--blue);border:1px solid #4a8eff30;border-radius:9px;padding:8px 12px;font-size:12px;font-weight:700;font-family:'DM Mono',monospace">+ Channel</button>
+          <button onclick="openAddMem()" style="background:var(--acc);color:var(--bg);border:none;border-radius:9px;padding:8px 12px;font-size:12px;font-weight:900;font-family:'DM Mono',monospace">+ Anggota</button>
+        </div>
+      </div>
+      <div class="sgrid" id="sgrid"></div>
+      <div class="atabs">
+        <button class="atab active" onclick="admTab('mem',this)">👥 Anggota</button>
+        <button class="atab" onclick="admTab('ch',this)">💬 Channel</button>
+      </div>
+      <div id="admmem"></div>
+      <div id="admch" style="display:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px"></div>
+    </div>
+  </div>
+</div>
+<!-- MODALS -->
+<div class="movl" id="profmod" onclick="if(event.target===this)closeProf()">
+  <div class="mbox">
+    <div class="mtitle">👤 Edit Profil</div>
+    <div id="profprev" style="display:flex;justify-content:center;margin-bottom:14px"></div>
+    <label class="fl">NAMA LENGKAP</label><input class="fi" id="pname" type="text"/>
+    <label class="fl">DEPARTEMEN</label>
+    <select class="fs" id="pdept"><option>Engineering</option><option>Marketing</option><option>Design</option><option>Sales</option><option>HR</option></select>
+    <label class="fl">STATUS</label>
+    <select class="fs" id="pstatus"><option value="online">🟢 Online</option><option value="away">🟡 Away</option><option value="offline">⚫ Offline</option></select>
+    <label class="fl">AVATAR EMOJI (opsional)</label>
+    <input class="fi" id="pemoji" placeholder="Contoh: 😊 🚀" oninput="prevEmoji()"/>
+    <div class="mbtns"><button class="bcnl" onclick="closeProf()">Batal</button><button class="bkok" onclick="saveProf()">Simpan</button></div>
+  </div>
+</div>
+<div class="movl" id="stmod" onclick="if(event.target===this)closeStMod()">
+  <div class="mbox">
+    <div class="mtitle">📸 Tambah Story</div>
+    <p style="font-size:12px;color:var(--sub);margin-bottom:12px">Hilang otomatis setelah 24 jam</p>
+    <label class="fl">TEKS STORY</label>
+    <textarea class="fi" id="sttext" rows="3" placeholder="Apa yang ingin Anda bagikan?" style="resize:none;height:80px"></textarea>
+    <label class="fl">EMOJI (opsional)</label><input class="fi" id="stemoji" placeholder="Contoh: 🎉 🔥 💪"/>
+    <div class="mbtns"><button class="bcnl" onclick="closeStMod()">Batal</button><button class="bkok" onclick="postStory()">Post Story</button></div>
+  </div>
+</div>
+<div class="movl" id="stvwr" onclick="if(event.target===this)this.style.display='none'"></div>
+<div class="movl" id="chmod" onclick="if(event.target===this)closeAddCh()">
+  <div class="mbox">
+    <div class="mtitle">➕ Buat Channel Baru</div>
+    <label class="fl">NAMA CHANNEL</label><input class="fi" id="newchname" placeholder="Contoh: project-alpha"/>
+    <label class="fl">ICON</label>
+    <select class="fs" id="newchicon"><option value="#"># Umum</option><option value="📢">📢 Pengumuman</option><option value="🎯">🎯 Target</option><option value="💡">💡 Ide</option><option value="🚀">🚀 Project</option></select>
+    <div class="mbtns"><button class="bcnl" onclick="closeAddCh()">Batal</button><button class="bkok" onclick="addChannel()">Buat</button></div>
+  </div>
+</div>
+<div class="movl" id="memmod" onclick="if(event.target===this)closeAddMem()">
+  <div class="mbox">
+    <div class="mtitle">➕ Tambah Anggota</div>
+    <label class="fl">NAMA</label><input class="fi" id="mname" placeholder="Nama lengkap"/>
+    <label class="fl">EMAIL</label><input class="fi" id="memail" type="email" placeholder="email@perusahaan.com"/>
+    <label class="fl">PASSWORD AWAL</label><input class="fi" id="mpass" type="password" placeholder="Min. 6 karakter"/>
+    <label class="fl">ROLE</label><select class="fs" id="mrole"><option>Member</option><option>Manager</option><option>Admin</option></select>
+    <label class="fl">DEPARTEMEN</label><select class="fs" id="mdept"><option>Engineering</option><option>Marketing</option><option>Design</option><option>Sales</option><option>HR</option></select>
+    <div class="mbtns"><button class="bcnl" onclick="closeAddMem()">Batal</button><button class="bkok" onclick="addMember()">Tambahkan</button></div>
+  </div>
+</div>
+<div id="toast"></div>
+<script>
+firebase.initializeApp({
+  apiKey:"AIzaSyC9ey32b6vC66Ch3BLF2C3JvSMmv0p0KJU",
+  authDomain:"teamchat-perusahaan-saya.firebaseapp.com",
+  projectId:"teamchat-perusahaan-saya",
+  storageBucket:"teamchat-perusahaan-saya.firebasestorage.app",
+  messagingSenderId:"593346653209",
+  appId:"1:593346653209:web:f2c7b51b2308d3b9fc0e88"
+});
+const auth=firebase.auth(),db=firebase.firestore();
+let me=null,myP=null,activeCh="general",activeDM=null;
+let unsubMsg=null,unsubMem=null,unsubSt=null;
+let allMem=[],allSt=[],replyTo=null;
+const CHANNELS=[{id:"general",name:"general",icon:"#"},{id:"engineering",name:"engineering",icon:"#"},{id:"marketing",name:"marketing",icon:"#"},{id:"design",name:"design",icon:"#"},{id:"announcements",name:"announcements",icon:"📢"}];
+const $=id=>document.getElementById(id);
+const v=id=>($( id)||{value:""}).value.trim();
+const sc=s=>s==="online"?"#00d68f":s==="away"?"#ff9f43":"#383e5a";
+const rc=r=>r==="Admin"?"#00d68f":r==="Manager"?"#4a8eff":"#7a84a0";
+const esc=s=>String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+function av(u,sz=36){
+  const fs=Math.round(sz*.32),ds=Math.round(sz*.28);
+  const dot=`<span style="position:absolute;bottom:0;right:0;width:${ds}px;height:${ds}px;border-radius:50%;background:${sc(u.status||"offline")};border:2px solid var(--surf)"></span>`;
+  if(u.emojiAv) return `<div style="position:relative;flex-shrink:0;width:${sz}px;height:${sz}px;border-radius:50%;background:var(--card);border:1.5px solid var(--bdr);display:flex;align-items:center;justify-content:center;font-size:${Math.round(sz*.5)}px">${u.emojiAv}${dot}</div>`;
+  return `<div style="position:relative;flex-shrink:0;width:${sz}px;height:${sz}px;border-radius:50%;background:linear-gradient(135deg,#00d68f30,#4a8eff30);border:1.5px solid var(--bdr);display:flex;align-items:center;justify-content:center;font-size:${fs}px;font-weight:700;color:#00d68f;font-family:'DM Mono',monospace">${esc(u.avatar||"?")}${dot}</div>`;
+}
+let toastT;
+function toast(msg,type="ok"){const el=$("toast");el.textContent=(type==="err"?"🗑 ":"✅ ")+msg;el.style.background=type==="err"?"#ff4d4d":"#00d68f";el.style.color=type==="err"?"#fff":"#0b0d14";el.style.display="block";clearTimeout(toastT);toastT=setTimeout(()=>el.style.display="none",2800);}
+function showErr(el,msg){el.textContent=msg;el.style.display="block";}
+function showLogin(){$("reg-page").style.display="none";$("login-page").style.display="flex";}
+function showReg(){$("login-page").style.display="none";$("reg-page").style.display="flex";}
+auth.onAuthStateChanged(async user=>{
+  if(user){
+    me=user;
+    const snap=await db.collection("users").doc(user.uid).get();
+    if(snap.exists){myP=snap.data();}
+    else{myP={uid:user.uid,name:user.displayName||user.email.split("@")[0],email:user.email,role:"Member",dept:"General",avatar:(user.displayName||user.email).slice(0,2).toUpperCase(),status:"online",emojiAv:""};await db.collection("users").doc(user.uid).set(myP);}
+    db.collection("users").doc(user.uid).update({status:"online"}).catch(()=>{});
+    enterApp();
+  }else{me=null;myP=null;$("app").style.display="none";$("login-page").style.display="flex";$("reg-page").style.display="none";}
+});
+function doLogin(){
+  const el=$("lerr");el.style.display="none";
+  auth.signInWithEmailAndPassword(v("lemail"),v("lpass")).catch(()=>{el.textContent="Email atau password salah.";el.style.display="block";});
+}
+function doRegister(){
+  const nm=v("rname"),em=v("remail"),dp=v("rdept"),pw=v("rpass"),pw2=v("rpass2");
+  const el=$("rerr");el.style.display="none";
+  if(!nm||!em||!pw)return showErr(el,"Semua field wajib diisi.");
+  if(pw.length<6)return showErr(el,"Password min. 6 karakter.");
+  if(pw!==pw2)return showErr(el,"Password tidak cocok.");
+  auth.createUserWithEmailAndPassword(em,pw).then(c=>{
+    c.user.updateProfile({displayName:nm});
+    const a=nm.split(" ").map(w=>w[0]).join("").slice(0,2).toUpperCase();
+    return db.collection("users").doc(c.user.uid).set({uid:c.user.uid,name:nm,email:em,role:"Member",dept:dp,avatar:a,status:"online",emojiAv:"",createdAt:firebase.firestore.FieldValue.serverTimestamp()});
+  }).catch(e=>showErr(el,e.code==="auth/email-already-in-use"?"Email sudah terdaftar.":e.message));
+}
+function doLogout(){
+  if(myP)db.collection("users").doc(me.uid).update({status:"offline"}).catch(()=>{});
+  if(unsubMsg)unsubMsg();if(unsubMem)unsubMem();if(unsubSt)unsubSt();
+  auth.signOut();
+}
+function enterApp(){
+  $("login-page").style.display="none";$("reg-page").style.display="none";$("app").style.display="flex";
+  updateTopbar();listenMem();listenSt();loadCh();setChannel("general");
+}
+function updateTopbar(){
+  $("topav").innerHTML=av(myP,30);
+  $("topnm").textContent=myP.name.split(" ")[0];
+  $("toprl").textContent=myP.role;
+}
+function listenMem(){
+  if(unsubMem)unsubMem();
+  unsubMem=db.collection("users").onSnapshot(snap=>{
+    allMem=snap.docs.map(d=>d.data());
+    const f=allMem.find(m=>m.uid===me.uid);if(f)myP={...myP,...f};
+    renderCh();renderDM();renderOnline();renderRings();
+  });
+}
+function listenSt(){
+  if(unsubSt)unsubSt();
+  unsubSt=db.collection("stories").orderBy("createdAt","desc").onSnapshot(snap=>{
+    const now=Date.now();
+    allSt=snap.docs.map(d=>d.data()).filter(s=>s.createdAt&&(now-s.createdAt.toMillis())<86400000);
+    renderRings();
+    if($("tabst").style.display!=="none")renderStTab();
+  });
+}
+function listenMsg(colRef){
+  if(unsubMsg)unsubMsg();
+  unsubMsg=colRef.orderBy("createdAt","asc").onSnapshot(snap=>{
+    renderMsgs(snap.docs.map(d=>({id:d.id,...d.data()})));
+  });
+}
+function loadCh(){
+  db.collection("channelList").get().then(snap=>{
+    snap.docs.forEach(d=>{const data=d.data();if(!CHANNELS.find(c=>c.id===data.id))CHANNELS.push({id:data.id,name:data.name,icon:data.icon||"#"});});
+    renderCh();
+  }).catch(()=>renderCh());
+}
+function renderCh(q=""){
+  const el=$("chlist");if(!el)return;el.innerHTML="";
+  CHANNELS.filter(c=>c.name.includes((q||"").toLowerCase())).forEach(ch=>{
+    const btn=document.createElement("button");
+    btn.className="sitm"+(ch.id===activeCh&&!activeDM?" active":"");
+    btn.innerHTML=`<span class="sil"><span style="opacity:.65">${ch.icon}</span><span class="sin">${ch.name}</span></span>`;
+    btn.onclick=()=>{setChannel(ch.id);closeSidebar();};
+    el.appendChild(btn);
+  });
+}
+function filterCh(q){renderCh(q);}
+function setChannel(id){
+  activeCh=id;activeDM=null;
+  const ch=CHANNELS.find(c=>c.id===id)||{icon:"#",name:id};
+  $("chaticon").textContent=ch.icon;$("chattitle").textContent=ch.name;
+  $("chatsub").textContent="channel publik";$("chatsub").style.color="var(--sub)";
+  $("msginput").placeholder=`Pesan ke #${ch.name}...`;
+  clearReply();listenMsg(db.collection("channels").doc(id).collection("messages"));renderCh();
+}
+function renderDM(){
+  const el=$("dmlist");if(!el)return;
+  const others=allMem.filter(m=>m.uid!==me.uid);
+  el.innerHTML=others.length===0?`<div style="padding:12px;font-size:12px;color:var(--dim)">Belum ada anggota lain.</div>`:
+    others.map(u=>`<button class="sitm${activeDM===u.uid?" active":""}" onclick="openDM('${u.uid}')"><span class="sil">${av(u,26)}<span class="sin">${esc(u.name.split(" ")[0])}</span></span><span style="width:7px;height:7px;border-radius:50%;background:${sc(u.status)};flex-shrink:0"></span></button>`).join("");
+}
+function openDM(uid){
+  activeDM=uid;activeCh=null;
+  const user=allMem.find(m=>m.uid===uid);if(!user)return;
+  $("chaticon").innerHTML=av(user,26);$("chattitle").textContent=user.name;
+  $("chatsub").textContent=user.status==="online"?"● online":"● offline";$("chatsub").style.color=sc(user.status);
+  $("msginput").placeholder=`Pesan ke ${user.name.split(" ")[0]}...`;
+  clearReply();
+  const dmId=[me.uid,uid].sort().join("_");
+  listenMsg(db.collection("dms").doc(dmId).collection("messages"));
+  renderDM();renderCh();closeSidebar();
+}
+function renderOnline(){
+  const el=$("onlinelist");if(!el)return;
+  const online=allMem.filter(m=>m.status==="online");
+  $("onlinecnt").textContent=online.length;
+  el.innerHTML=online.map(u=>`<div style="display:flex;align-items:center;gap:8px;padding:4px 10px;border-radius:7px">${av(u,22)}<span style="font-size:12px;color:var(--sub);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(u.name.split(" ")[0])}</span></div>`).join("");
+}
+function renderMsgs(msgs){
+  const el=$("msgs");
+  const atBot=el.scrollHeight-el.scrollTop-el.clientHeight<80;
+  el.innerHTML=`<div class="sysmsg">📅 Awal percakapan</div>`;
+  msgs.forEach((msg,i)=>{
+    const isOwn=msg.uid===me.uid,showHead=i===0||msgs[i-1].uid!==msg.uid;
+    const t=msg.createdAt?.toDate?msg.createdAt.toDate().toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-digit"}):"";
+    const rHTML=msg.replyTo?`<div class="rprev${isOwn?" own":""}"><span class="rpnm">${esc(msg.replyTo.senderName||"")}</span><span class="rptx">${esc(msg.replyTo.text||"")}</span></div>`:"";
+    const row=document.createElement("div");
+    row.className="mrow"+(isOwn?" own":"")+(showHead?" msp":"");
+    const sname=esc((msg.senderName||"?").replace(/'/g,"&#39;"));
+    const stxt=esc((msg.text||"").replace(/'/g,"&#39;"));
+    row.innerHTML=`<div class="mavc">${showHead?av({avatar:msg.avatar||"?",emojiAv:msg.emojiAv||"",status:"online"},30):""}</div><div class="mbody">${showHead?`<div class="mmeta"><span class="msndr">${esc((msg.senderName||"?").split(" ")[0])}</span><span class="mtime">${t}</span></div>`:""}<div>${rHTML}<div class="mbbl" onclick="setReply('${sname}','${stxt}')">${esc(msg.text)}</div></div></div>`;
+    el.appendChild(row);
+  });
+  if(atBot||msgs.length<=1)el.scrollTop=el.scrollHeight;
+}
+async function sendMsg(){
+  const inp=$("msginput"),txt=inp.value.trim();if(!txt)return;
+  inp.value="";$("sndbtn").classList.remove("ready");
+  const data={uid:me.uid,senderName:myP.name,avatar:myP.avatar,emojiAv:myP.emojiAv||"",text:txt,createdAt:firebase.firestore.FieldValue.serverTimestamp()};
+  if(replyTo){data.replyTo=replyTo;clearReply();}
+  if(activeDM){const dmId=[me.uid,activeDM].sort().join("_");await db.collection("dms").doc(dmId).collection("messages").add(data);}
+  else if(activeCh){await db.collection("channels").doc(activeCh).collection("messages").add(data);}
+}
+function handleEnter(e){if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();sendMsg();}}
+function toggleSend(){$("sndbtn").classList.toggle("ready",$("msginput").value.trim().length>0);}
+function setReply(senderName,text){replyTo={senderName,text};$("rbar").style.display="flex";$("rbn").textContent=senderName;$("rbt").textContent=text;$("msginput").focus();}
+function clearReply(){replyTo=null;$("rbar").style.display="none";}
+function renderRings(){
+  const el=$("srings");if(!el)return;
+  const myS=allSt.find(s=>s.uid===me.uid),others=allSt.filter(s=>s.uid!==me.uid);
+  el.innerHTML=`<button class="sring${myS?" has":""}" onclick="openAddStory()"><div class="srav">${av(myP,36)}</div><span class="srlb">${myS?"Saya":"+ Story"}</span></button>`+
+    others.map(s=>{const u=allMem.find(m=>m.uid===s.uid)||{avatar:"?",emojiAv:"",status:"offline"};return `<button class="sring has" onclick="viewStory('${s.uid}')"><div class="srav">${av(u,36)}</div><span class="srlb">${esc((allMem.find(m=>m.uid===s.uid)||{name:"?"}).name.split(" ")[0])}</span></button>`;}).join("");
+}
+function renderStTab(){
+  const el=$("tabst");if(!el)return;
+  el.innerHTML=`<button class="baddst" onclick="openAddStory()">+ Tambah Story</button><div style="margin-top:12px">${allSt.length===0?`<div style="text-align:center;padding:30px;color:var(--dim);font-size:13px">Belum ada story hari ini.</div>`:allSt.map(s=>{const u=allMem.find(m=>m.uid===s.uid)||{avatar:"?",emojiAv:"",status:"offline",name:"?"};const t=s.createdAt?.toDate?s.createdAt.toDate().toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-digit"}):"";return `<div class="stcard" onclick="viewStory('${s.uid}')">${av(u,40)}<div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:700;color:var(--txt)">${esc(u.name)}</div><div style="font-size:12px;color:var(--sub);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(s.text||"")}</div>${s.emoji?`<div style="font-size:20px;margin-top:2px">${s.emoji}</div>`:""}</div><span style="font-size:10px;color:var(--dim);flex-shrink:0">${t}</span></div>`;}).join("")}</div>`;
+}
+function openAddStory(){$("stmod").style.display="flex";$("sttext").value="";$("stemoji").value="";}
+function closeStMod(){$("stmod").style.display="none";}
+async function postStory(){
+  const text=v("sttext"),emoji=v("stemoji");
+  if(!text&&!emoji){toast("Isi story dulu!","err");return;}
+  const snap=await db.collection("stories").where("uid","==",me.uid).get();
+  for(const d of snap.docs)await d.ref.delete();
+  await db.collection("stories").add({uid:me.uid,senderName:myP.name,avatar:myP.avatar,emojiAv:myP.emojiAv||"",text,emoji,createdAt:firebase.firestore.FieldValue.serverTimestamp()});
+  closeStMod();toast("Story berhasil dipost!");
+}
+function viewStory(uid){
+  const story=allSt.find(s=>s.uid===uid),user=allMem.find(m=>m.uid===uid)||myP;
+  if(!story)return;
+  const t=story.createdAt?.toDate?story.createdAt.toDate().toLocaleString("id-ID",{hour:"2-digit",minute:"2-digit",day:"numeric",month:"short"}):"";
+  $("stvwr").innerHTML=`<div class="svbox"><button class="svclose" onclick="document.getElementById('stvwr').style.display='none'">✕</button><div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">${av(user,44)}<div><div style="font-weight:800;color:var(--txt);font-size:14px">${esc(user.name)}</div><div style="font-size:11px;color:var(--sub)">${t}</div></div></div>${story.emoji?`<div style="font-size:52px;text-align:center;margin-bottom:10px">${story.emoji}</div>`:""}<div style="font-size:15px;color:var(--txt);line-height:1.6;text-align:center">${esc(story.text||"")}</div>${uid===me.uid?`<button onclick="delMyStory()" style="margin-top:20px;width:100%;background:var(--red-lo);border:1px solid #ff4d4d30;color:var(--red);border-radius:9px;padding:9px;font-size:12px;font-weight:700;font-family:'DM Mono',monospace;cursor:pointer">🗑 Hapus Story Saya</button>`:""}</div>`;
+  $("stvwr").style.display="flex";
+}
+async function delMyStory(){
+  const snap=await db.collection("stories").where("uid","==",me.uid).get();
+  for(const d of snap.docs)await d.ref.delete();
+  $("stvwr").style.display="none";toast("Story dihapus.");
+}
+function openProf(){$("pname").value=myP.name||"";$("pdept").value=myP.dept||"Engineering";$("pstatus").value=myP.status||"online";$("pemoji").value=myP.emojiAv||"";$("profprev").innerHTML=av(myP,64);$("profmod").style.display="flex";}
+function closeProf(){$("profmod").style.display="none";}
+function prevEmoji(){const e=v("pemoji");$("profprev").innerHTML=e?`<div style="width:64px;height:64px;border-radius:50%;background:var(--card);border:2px solid var(--acc);display:flex;align-items:center;justify-content:center;font-size:32px">${e}</div>`:av(myP,64);}
+async function saveProf(){
+  const nm=v("pname"),dp=v("pdept"),st=v("pstatus"),em=v("pemoji");
+  if(!nm){toast("Nama tidak boleh kosong!","err");return;}
+  const a=nm.split(" ").map(w=>w[0]).join("").slice(0,2).toUpperCase();
+  const upd={name:nm,dept:dp,status:st,avatar:a,emojiAv:em};
+  await db.collection("users").doc(me.uid).update(upd);
+  await me.updateProfile({displayName:nm});
+  myP={...myP,...upd};updateTopbar();closeProf();toast("Profil berhasil disimpan!");
+}
+function switchTab(tab){
+  ["ch","dm","st"].forEach(t=>{$("stt"+t).classList.toggle("active",t===tab);$("tab"+t).style.display=t===tab?"block":"none";});
+  if(tab==="st"){$("tabst").style.display="block";renderStTab();}
+  if(tab==="dm")renderDM();
+}
+function switchView(vw){
+  $("chatview").style.display=vw==="chat"?"flex":"none";
+  $("adminview").style.display=vw==="admin"?"block":"none";
+  $("nvchat").classList.toggle("active",vw==="chat");
+  $("nvadmin").classList.toggle("active",vw==="admin");
+  if(vw==="admin")renderAdmin();
+}
+function openSidebar(){$("sovl").classList.add("open");}
+function closeSidebar(){$("sovl").classList.remove("open");}
+function renderAdmin(){
+  const online=allMem.filter(m=>m.status==="online").length;
+  $("sgrid").innerHTML=[{l:"Total Anggota",v:allMem.length,i:"👥",c:"var(--acc)"},{l:"Online",v:online,i:"🟢",c:"var(--blue)"},{l:"Channel",v:CHANNELS.length,i:"💬",c:"var(--org)"},{l:"Story Aktif",v:allSt.length,i:"📸",c:"var(--red)"}].map(s=>`<div class="scard" style="border-left:3px solid ${s.c}"><div style="font-size:18px;margin-bottom:4px">${s.i}</div><div style="font-size:24px;font-weight:900;color:${s.c};font-family:'DM Mono',monospace">${s.v}</div><div style="font-size:11px;color:var(--sub);margin-top:2px">${s.l}</div></div>`).join("");
+  const canEdit=myP?.role==="Admin"||myP?.role==="Manager";
+  $("admmem").innerHTML=allMem.map(u=>`<div class="ucard">${av(u,40)}<div style="flex:1;min-width:0"><div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:3px"><span style="font-size:13px;font-weight:700;color:var(--txt)">${esc(u.name)}</span><span style="font-size:10px;font-weight:800;padding:2px 7px;border-radius:20px;background:${rc(u.role)}18;color:${rc(u.role)};border:1px solid ${rc(u.role)}35;font-family:'DM Mono',monospace">${u.role.toUpperCase()}</span></div><div style="font-size:11px;color:var(--sub)">${esc(u.dept||"")} · <span style="color:${sc(u.status)}">● ${u.status}</span></div></div>${canEdit&&u.uid!==me.uid?`<div style="display:flex;gap:6px;flex-shrink:0"><button style="border-radius:7px;padding:6px 9px;font-size:12px;font-weight:700;border:none;background:var(--blue-lo);color:var(--blue);cursor:pointer" onclick="promoteUser('${u.uid}','${u.role}')">⬆</button>${u.role!=="Admin"?`<button style="border-radius:7px;padding:6px 9px;font-size:12px;font-weight:700;border:none;background:var(--red-lo);color:var(--red);cursor:pointer" onclick="removeUser('${u.uid}')">🗑</button>`:""}</div>`:""}</div>`).join("");
+}
+function admTab(tab,btn){document.querySelectorAll(".atab").forEach(b=>b.classList.remove("active"));btn.classList.add("active");$("admmem").style.display=tab==="mem"?"block":"none";$("admch").style.display=tab==="ch"?"grid":"none";}
+async function promoteUser(uid,role){const next=role==="Member"?"Manager":role==="Manager"?"Admin":"Member";await db.collection("users").doc(uid).update({role:next});toast(`Role diubah ke ${next}.`);}
+async function removeUser(uid){if(!confirm("Hapus anggota ini?"))return;await db.collection("users").doc(uid).delete();toast("Anggota dihapus.","err");}
+function openAddCh(){$("chmod").style.display="flex";$("newchname").value="";}
+function closeAddCh(){$("chmod").style.display="none";}
+async function addChannel(){
+  const name=v("newchname").toLowerCase().replace(/\s+/g,"-").replace(/[^a-z0-9-]/g,""),icon=v("newchicon");
+  if(!name){toast("Nama channel kosong!","err");return;}
+  if(CHANNELS.find(c=>c.id===name)){toast("Channel sudah ada!","err");return;}
+  await db.collection("channelList").doc(name).set({id:name,name,icon,createdBy:me.uid,createdAt:firebase.firestore.FieldValue.serverTimestamp()});
+  CHANNELS.push({id:name,name,icon});closeAddCh();renderCh();setChannel(name);toast(`#${name} dibuat!`);
+}
+function openAddMem(){$("memmod").style.display="flex";$("mname").value=$("memail").value=$("mpass").value="";}
+function closeAddMem(){$("memmod").style.display="none";}
+async function addMember(){
+  const nm=v("mname"),em=v("memail"),pw=v("mpass"),rl=v("mrole"),dp=v("mdept");
+  if(!nm||!em||!pw){toast("Semua field wajib!","err");return;}
+  try{
+    const c=await auth.createUserWithEmailAndPassword(em,pw);
+    await c.user.updateProfile({displayName:nm});
+    const a=nm.split(" ").map(w=>w[0]).join("").slice(0,2).toUpperCase();
+    await db.collection("users").doc(c.user.uid).set({uid:c.user.uid,name:nm,email:em,role:rl,dept:dp,avatar:a,status:"offline",emojiAv:"",createdAt:firebase.firestore.FieldValue.serverTimestamp()});
+    closeAddMem();toast("Anggota ditambahkan!");
+  }catch(e){toast(e.code==="auth/email-already-in-use"?"Email sudah ada.":e.message,"err");}
+}
+</script>
+</body>
+</html>
